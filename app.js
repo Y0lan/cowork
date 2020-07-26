@@ -1,16 +1,21 @@
 const express = require('express');
+const fs = require('fs')
 
 const app = express();
-
-app.get('/', (req, res) => {
-  res.status(200).send('Hello from the server!');
-});
-
-app.post('/', (req, res) => {
-  res.send('FUCK');
-});
-
+const spaces = JSON.parse(fs.readFileSync(`${__dirname}/data/spaces.json`));
+app.get('/api/v1/spaces', (req, res) => {
+  res.status(200).json(
+      {
+          status: 'success',
+          results : spaces.length,
+          data:
+              {
+                  spaces
+              }
+      }
+  )
+})
 const port = 3000;
 app.listen(port, () => {
-  console.log('HELLO');
+  console.log('cowork.io is under construction...');
 });
