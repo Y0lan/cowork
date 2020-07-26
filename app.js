@@ -54,6 +54,41 @@ app.post('/api/v1/spaces/', (req, res) => {
     }
   );
 });
+
+app.patch('/api/v1/spaces/:id', (req, res) => {
+  const id = req.params.id * 1;
+  if (id > spaces.length) {
+    res.status(404).json({
+      status: 'fail',
+      message: 'invalid id',
+    });
+  }
+  spaces[id] = req.params.body;
+  const space = spaces[id];
+  res.status(201).json({
+    status: 'success',
+    data: {
+      space,
+    },
+  });
+});
+
+app.delete('/api/v1/spaces/:id', (req, res) => {
+  const id = req.params.id * 1;
+  if (id > spaces.length) {
+    res.status(404).json({
+      status: 'fail',
+      message: 'invalid id',
+    });
+  }
+  spaces[id] = req.params.body;
+  const space = spaces[id];
+  res.status(201).json({
+    status: 'success',
+    data: null
+  });
+});
+
 const port = 3000;
 app.listen(port, () => {
   console.log('cowork.io is under construction...');
