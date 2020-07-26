@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Y0lan/cowork#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "morgan": "^1.10.0",
     "prettier": "^2.0.5"
   }
 }

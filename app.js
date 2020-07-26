@@ -1,10 +1,15 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
+const morgan = require('morgan')
+// MIDDLEWARE
 app.use(express.json());
+app.use(morgan('dev'))
 
 const spaces = JSON.parse(fs.readFileSync(`${__dirname}/data/spaces.json`));
-app.get('/api/v1/spaces', (req, res) => {
+
+// ROUTE HANDLERS
+const getAllSpaces = (req, res) => {
   res.status(200).json({
     status: 'success',
     results: spaces.length,
@@ -12,11 +17,11 @@ app.get('/api/v1/spaces', (req, res) => {
       spaces,
     },
   });
-});
+};
 
-app.get('/api/v1/spaces/:id', (req, res) => {
+const getOneSpace = (req, res) => {
   const id = req.params.id * 1;
-  if (id > spaces.length) {
+  if (id >= spaces.length) {
     res.status(404).send({
       status: 'fail',
       message: 'invalid id',
@@ -30,9 +35,9 @@ app.get('/api/v1/spaces/:id', (req, res) => {
     },
   });
   res.send();
-});
+};
 
-app.post('/api/v1/spaces/', (req, res) => {
+const createOneSpace = (req, res) => {
   const space = req.body;
   space.id = spaces[spaces.length - 1].id + 1;
   spaces.push(space);
@@ -40,11 +45,6 @@ app.post('/api/v1/spaces/', (req, res) => {
     `${__dirname}/data/spaces.json`,
     JSON.stringify(spaces),
     (err) => {
-      if (err)
-        res.status(500).json({
-          status: 'error',
-          data: 'none',
-        });
       res.status(201).json({
         status: 'success',
         data: {
@@ -53,11 +53,11 @@ app.post('/api/v1/spaces/', (req, res) => {
       });
     }
   );
-});
+};
 
-app.patch('/api/v1/spaces/:id', (req, res) => {
+const modifyOneSpace = (req, res) => {
   const id = req.params.id * 1;
-  if (id > spaces.length) {
+  if (id >= spaces.length) {
     res.status(404).json({
       status: 'fail',
       message: 'invalid id',
@@ -68,14 +68,14 @@ app.patch('/api/v1/spaces/:id', (req, res) => {
   res.status(201).json({
     status: 'success',
     data: {
-      space,
+      space: 'modified space here!',
     },
   });
-});
+};
 
-app.delete('/api/v1/spaces/:id', (req, res) => {
+const deleteOneSpace = (req, res) => {
   const id = req.params.id * 1;
-  if (id > spaces.length) {
+  if (id >= spaces.length) {
     res.status(404).json({
       status: 'fail',
       message: 'invalid id',
@@ -85,10 +85,20 @@ app.delete('/api/v1/spaces/:id', (req, res) => {
   const space = spaces[id];
   res.status(201).json({
     status: 'success',
-    data: null
+    data: null,
   });
-});
+};
 
+// ROUTE
+
+app.route('/api/v1/spaces').get(getAllSpaces).post(createOneSpace);
+app
+  .route('/api/v1/spaces/:id')
+  .get(getOneSpace)
+  .delete(deleteOneSpace)
+  .patch(modifyOneSpace);
+
+// START SERVER
 const port = 3000;
 app.listen(port, () => {
   console.log('cowork.io is under construction...');
