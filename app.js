@@ -1,10 +1,10 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
-const morgan = require('morgan')
+const morgan = require('morgan');
 // MIDDLEWARE
 app.use(express.json());
-app.use(morgan('dev'))
+app.use(morgan('dev'));
 
 const spaces = JSON.parse(fs.readFileSync(`${__dirname}/data/spaces.json`));
 
@@ -89,14 +89,62 @@ const deleteOneSpace = (req, res) => {
   });
 };
 
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'this route is not yet defined!',
+  });
+};
+
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'this route is not yet defined!',
+  });
+};
+
+const getOneUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'this route is not yet defined!',
+  });
+};
+
+const deleteOneUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'this route is not yet defined!',
+  });
+};
+
+const modifyOneUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'this route is not yet defined!',
+  });
+};
+
 // ROUTE
 
-app.route('/api/v1/spaces').get(getAllSpaces).post(createOneSpace);
-app
-  .route('/api/v1/spaces/:id')
+const spacesRouter = express.Router();
+const usersRouter = express.Router();
+
+spacesRouter.route('/').get(getAllSpaces).post(createOneSpace);
+spacesRouter
+  .route('/:id')
   .get(getOneSpace)
   .delete(deleteOneSpace)
   .patch(modifyOneSpace);
+
+usersRouter.route('/').get(getAllUsers).post(createUser);
+usersRouter
+  .route('/:id')
+  .get(getOneUser)
+  .delete(deleteOneUser)
+  .patch(modifyOneUser);
+
+app.use('/api/v1/users', usersRouter)
+app.use('/api/v1/spaces', spacesRouter)
 
 // START SERVER
 const port = 3000;
