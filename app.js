@@ -7,7 +7,7 @@ const spacesRouter = require('./routes/spaceRoutes');
 const usersRouter = require('./routes/userRoutes');
 // MIDDLEWARE
 app.use(express.json());
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'dev') app.use(morgan('dev'));
 
 // ROUTE
 app.use('/api/v1/users', usersRouter);
