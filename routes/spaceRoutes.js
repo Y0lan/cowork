@@ -1,11 +1,10 @@
 const express = require('express');
 const spaceController = require('./../controllers/spaceController');
 const router = express.Router();
-router.param('id', spaceController.checkID)
 router
-    .route('/')
-    .get(spaceController.getAllSpaces)
-    .post(spaceController.checkBody, spaceController.createOneSpace);
+  .route('/')
+  .get(spaceController.getAllSpaces)
+  .post(spaceController.createOneSpace);
 router
   .route('/:id')
   .get(spaceController.getOneSpace)
