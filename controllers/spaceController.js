@@ -1,38 +1,61 @@
 const Space = require('./../models/spaceModel');
 
-exports.getAllSpaces = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    //results: spaces.length,
-    //data: {
-    // spaces,
-    //},
-  });
+exports.getAllSpaces = async (req, res) => {
+  const allSpaces = await Space.find({})
+  try {
+    res.status(200).json({
+      status: 'success',
+      results: allSpaces.length,
+      data: {
+       spaces: allSpaces
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      message: error.message
+    })
+  }
 };
 
-exports.getOneSpace = (req, res) => {
-  const id = req.params.id * 1;
-  // const space = spaces.find((el) => el.id === id);
-  res.status(200).json({
-    status: 'success',
-    //  data: {
-    //     space,
-    //   },
-  });
-  res.send();
+exports.getOneSpace = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const spaceRequested = await Space.findById(id)
+    res.status(200).json({
+      status: 'success',
+        data: {
+           space : spaceRequested,
+         },
+    });
+    res.send();
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      message: error.message
+    })
+  }
+
 };
 
 exports.createOneSpace = async (req, res) => {
-  const newSpace = await Space.create(req.body);
-  res.status(201).json({
-    status: 'success',
-    data: {
-      space: newSpace,
-    },
-  });
+  try {
+    const newSpace = await Space.create(req.body);
+    res.status(201).json({
+      status: 'success',
+      data: {
+        space: newSpace,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      message: error.message,
+    });
+  }
 };
 
-exports.modifyOneSpace = (req, res) => {
+exports.modifyOneSpace = async (req, res) => {
   const id = req.params.id * 1;
   //spaces[id] = req.params.body;
   //const space = spaces[id];
@@ -44,7 +67,7 @@ exports.modifyOneSpace = (req, res) => {
   });
 };
 
-exports.deleteOneSpace = (req, res) => {
+exports.deleteOneSpace = async (req, res) => {
   const id = req.params.id * 1;
   //spaces[id] = req.params.body;
   //const space = spaces[id];

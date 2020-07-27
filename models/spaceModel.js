@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
 const spaceSchema = new mongoose.Schema({
+  _id: {
+    type: Number,
+    required: true,
+  },
   name: {
     type: 'String',
     unique: true,
     required: [true, 'A space must have a name!'],
+  },
+  description: {
+    type: 'String',
   },
   rating: {
     type: Number,
@@ -55,4 +62,4 @@ const spaceSchema = new mongoose.Schema({
   },
 });
 const Space = mongoose.model('Space', spaceSchema);
-module.exports = Space
+module.exports = Space;
