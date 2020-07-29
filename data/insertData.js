@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Space = require('../models/spaceModel');
+const Space = require('./../models/spaceModel');
 const dotenv = require('dotenv');
 const fs = require('fs');
 dotenv.config({ path: './config.env' });
@@ -19,6 +19,24 @@ mongoose
   })
   .then((connection) => console.log('Database connection successfull !'));
 
-const data = fs.readFile('./spaces.json', (err, data) => {
-  if (err) throw err;
-});
+const deleteAllSpaces = async () => {
+  try {
+    await Space.deleteMany();
+    console.log('successfully deleted');
+    return true;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+const spaces = JSON.parse(fs.readFileSync(`${__dirname}/spaces.json`, 'utf-8'));
+
+const importSpaces = async () => {
+  try {
+    const docs = await Space.create(spaces);
+    console.log('successfully sent');
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+// deleteAllSpaces()
+importSpaces();
