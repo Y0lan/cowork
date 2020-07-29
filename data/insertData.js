@@ -1,5 +1,8 @@
+const express = require('express');
 const mongoose = require('mongoose');
+const Space = require('../models/spaceModel');
 const dotenv = require('dotenv');
+const fs = require('fs');
 dotenv.config({ path: './config.env' });
 
 const database = process.env.DATABASE.replace(
@@ -16,8 +19,6 @@ mongoose
   })
   .then((connection) => console.log('Database connection successfull !'));
 
-const app = require('./app');
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log('cowork.io is under construction...');
+const data = fs.readFile('./spaces.json', (err, data) => {
+  if (err) throw err;
 });

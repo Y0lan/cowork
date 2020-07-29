@@ -4,10 +4,10 @@ const router = express.Router();
 router
   .route('/')
   .get(spaceController.getAllSpaces)
-  .post(spaceController.createOneSpace);
+  .post(spaceController.incrementID, spaceController.createOneSpace);
 router
   .route('/:id')
-  .get(spaceController.getOneSpace)
-  .delete(spaceController.deleteOneSpace)
-  .patch(spaceController.modifyOneSpace);
+  .get(spaceController.checkID, spaceController.getOneSpace)
+  .delete(spaceController.checkID, spaceController.deleteOneSpace)
+  .patch(spaceController.checkID, spaceController.updateOneSpace);
 module.exports = router;
