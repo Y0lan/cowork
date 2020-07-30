@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 const spaceSchema = new mongoose.Schema({
   _id: {
     unique: true,
@@ -89,13 +90,20 @@ const spaceSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  full : {
+  full: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  available_seat : {
-   type: Number,
-  }
+  available_seat: {
+    type: Number,
+  },
+  slug: String
 });
+
+spaceSchema.pre('save', function(next) {
+  this.slug = slugify(this.name, {lower: true})
+  next()
+})
+
 const Space = mongoose.model('Space', spaceSchema);
 module.exports = Space;
