@@ -16,7 +16,7 @@ const spaceSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: [true, 'A space must have an address']
+    required: [true, 'A space must have an address'],
   },
   maxGroupSize: {
     type: Number,
@@ -28,23 +28,22 @@ const spaceSchema = new mongoose.Schema({
   },
   ratingsQuantity: {
     type: Number,
-    default: 0
+    default: 0,
   },
   priceDiscount: Number,
   summary: {
     type: String,
     trim: true,
-    required: [true, 'A space must have a summary']
+    required: [true, 'A space must have a summary'],
   },
   imageCover: {
     type: String,
-    required: [true, 'A space must have a cover image']
-
+    required: [true, 'A space must have a cover image'],
   },
   images: [String],
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
   open_time_monday_thursday: {
     type: [String, String],
@@ -90,6 +89,13 @@ const spaceSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  full : {
+    type: Boolean,
+    default: false
+  },
+  available_seat : {
+   type: Number,
+  }
 });
 const Space = mongoose.model('Space', spaceSchema);
 module.exports = Space;
