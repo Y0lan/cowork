@@ -12,4 +12,11 @@ if (process.env.NODE_ENV === 'dev') app.use(morgan('dev'));
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/spaces', spacesRouter);
 
+app.all('*', (req, res, next) => {
+  res.status(404).json({
+    status: 'fail',
+    message: `Can't find ${req.originalUrl} on this server`
+  })
+})
+
 module.exports = app;

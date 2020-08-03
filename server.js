@@ -8,7 +8,7 @@ const database = process.env.DATABASE.replace(
 );
 
 mongoose
-  .connect(database, {
+  . connect(database, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
@@ -21,3 +21,5 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log('cowork.io is under construction...');
 });
+
+// TEST
