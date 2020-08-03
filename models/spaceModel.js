@@ -10,6 +10,7 @@ const spaceSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     required: [true, 'A space must have a name!'],
+    minLength: [10, 'A space must have 10 characters minimum'],
   },
   description: {
     type: 'String',
@@ -26,12 +27,19 @@ const spaceSchema = new mongoose.Schema({
   ratingsAverage: {
     type: Number,
     default: 4.5,
+    min: [1, 'Rating must be above 1.0'],
+    max: [5, 'Rating must be below 5.0'],
   },
   ratingsQuantity: {
     type: Number,
     default: 0,
   },
-  priceDiscount: Number,
+  priceDiscount: {
+    type: Number,
+    validate: function (val) {
+      return val < this.price;
+    },
+  },
   summary: {
     type: String,
     trim: true,
@@ -97,13 +105,13 @@ const spaceSchema = new mongoose.Schema({
   available_seat: {
     type: Number,
   },
-  slug: String
+  slug: String,
 });
 
-spaceSchema.pre('save', function(next) {
-  this.slug = slugify(this.name, {lower: true})
-  next()
-})
+spaceSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 
 const Space = mongoose.model('Space', spaceSchema);
 module.exports = Space;
