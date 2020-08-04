@@ -10,7 +10,7 @@ const spaceSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     required: [true, 'A space must have a name!'],
-    minLength: [10, 'A space must have 10 characters minimum'],
+    minlength: [10, 'A space must have 10 characters minimum'],
   },
   description: {
     type: 'String',
