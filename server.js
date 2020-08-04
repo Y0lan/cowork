@@ -7,8 +7,14 @@ const database = process.env.DATABASE.replace(
   process.env.PASSWORD
 );
 
+process.on('uncaughtException', (error) => {
+  console.error('UNCAUGHT EXCEPTION ERROR!\n', error.name, error.message);
+  console.error('Shutting down...');
+  process.exit(1);
+});
+
 mongoose
-  . connect(database, {
+  .connect(database, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
@@ -22,4 +28,12 @@ app.listen(port, () => {
   console.log('cowork.io is under construction...');
 });
 
-// TEST
+process.on('unhandledRejection', (error) => {
+  console.error('UNCHANDLED EXCEPTION ERROR!\n', error.name, error.message);
+  console.error('Shutting down...');
+  // Let all the async request finish before shutting down
+  app.close(() => {
+    // shutting down
+    process.exit(1);
+  });
+});
