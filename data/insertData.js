@@ -38,5 +38,5 @@ const importSpaces = async () => {
     console.log(err.message);
   }
 };
-// deleteAllSpaces()
-importSpaces();
+deleteAllSpaces();
+//importSpaces();
