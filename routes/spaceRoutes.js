@@ -1,12 +1,13 @@
 const express = require('express');
 const spaceController = require('./../controllers/spaceController');
+const authentificationController = require('./../controllers/authentificationController');
 const router = express.Router();
 
 router.route('/available-spaces').get(spaceController.getAllSpaces);
 
 router
   .route('/')
-  .get(spaceController.getAllSpaces)
+  .get(authentificationController.protect, spaceController.getAllSpaces)
   .post(spaceController.incrementID, spaceController.createOneSpace);
 router
   .route('/:id')
