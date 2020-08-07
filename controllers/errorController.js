@@ -38,6 +38,12 @@ const sendErrorProd = (error, res) => {
   });
 };
 
+const handleJWTError = () => new AppError('Invalid token.', 401);
+
+const handleJWTExpiredError = () => {
+  new AppError('Session expired.', 401);
+};
+
 module.exports = (error, req, res, next) => {
   error.statusCode = error.statusCode || 500;
   error.status = error.status || 'error';
@@ -48,6 +54,8 @@ module.exports = (error, req, res, next) => {
     if (error.code === 11000) error = handleDuplicateFieldsDatabase(error);
     if (error.name === 'ValidationError')
       error = handleValidationErrorDatabase(error);
+    if (error.name === 'JsonWebTokenError') error = handleJWTError();
+    if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
     sendErrorProd(error, res);
   }
 };
