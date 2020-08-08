@@ -73,14 +73,22 @@ exports.protect = catchAsynchronousError(async (req, res, next) => {
   // Check if user still exists
   const loggedUser = await User.findById(decoded.id);
   if (!loggedUser) {
-    return next(new AppError('The user you try to log in does not exist'));
+    return next(
+      new AppError('The user you try to log in does not exist.'),
+      401
+    );
   }
   // Check if user changed password after the token was issued
   // iat : issued at
-  if(loggedUser.changePasswordAfter(decoded.iat)) {
-    return next(new AppError('Invalid token, you must have modified your password recently.', 401))
+  if (loggedUser.changePasswordAfter(decoded.iat)) {
+    return next(
+      new AppError(
+        'Invalid token, you must have modified your password recently.',
+        401
+      )
+    );
   }
   // get access to protected route
-  req.user = loggedUser
+  req.user = loggedUser;
   next();
 });
