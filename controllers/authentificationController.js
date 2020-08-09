@@ -3,6 +3,8 @@ const User = require('./../models/userModel');
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
 const AppError = require('./../utils/AppError');
 const { promisify } = require('util');
+const sendEmail = require('./../utils/email');
+const crypto = require('crypto');
 
 exports.incrementID = async (req, res, next) => {
   const total = await User.countDocuments();
@@ -105,11 +107,66 @@ exports.restrictTo = (...roles) => {
 };
 
 exports.forgotPassword = catchAsynchronousError(async (req, res, next) => {
+  // get user based on email
   const user = await User.findOne({ email: req.body.email });
   if (!user) return next(new AppError('Email incorrect', 404));
+
+  // generate token
   const resetToken = user.createPasswordResetToken();
 
   // to accept only the email field in user.save
   await user.save({ validateBeforeSave: false });
+
+  // sent email to user
+  const resetUrl = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/users/resetPassword/${resetToken}`;
+  const message = `Forgot your password? Click here: ${resetUrl}. 
+  If you did not request a password change, simply ignore this email.`;
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'cowork.io reset token (valid for 10 minutes)',
+      message,
+    });
+    res.status(200).json({
+      status: 'success',
+      message: 'token sent to email',
+    });
+  } catch (error) {
+    user.passwordResetExpires = undefined;
+    user.passwordResetToken = undefined;
+    await user.save({ validateBeforeSave: false });
+    return next(
+      new AppError('There was an error sending the email. Try again later'),
+      500
+    );
+  }
 });
-exports.resetPassword = async (req, res, next) => {};
+
+exports.resetPassword = catchAsynchronousError(async (req, res, next) => {
+  // get user with token
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    // check if token has expired
+    passwordResetExpires: { $gt: Date.now() },
+  });
+  // check if there is a user
+  if (!user) return next(new AppError('Token is invalid or has expired', 400));
+  // reset the password of the user
+  user.password = req.body.password;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+  // log the user in
+  const token = signJWT(user._id);
+
+  res.status(200).json({
+    status: 'success',
+    token,
+  });
+});

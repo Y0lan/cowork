@@ -45,6 +45,14 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('save', async function (next) {
+  if(!this.isModified('password') || this.isNew) return next();
+
+  // make sure the jwt is generated and saved to DB BEFORE this field is updated
+  this.passwordLastChangedAt = Date.now() - 1000;
+  next();
+});
+
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
@@ -70,7 +78,7 @@ userSchema.methods.createPasswordResetToken = function () {
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
-  this.passwordResetExpires = Date.now() + 600000; // 10 secondes = 10 * 60 * 1000
+  this.passwordResetExpires = Date.now() + 600000; // 10 minutes = 10 * 60 sec = 60 * 1000 millisecondes
 
   return resetToken;
 };
