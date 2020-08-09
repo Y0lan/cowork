@@ -3,7 +3,7 @@ const APIFeatures = require('../utils/APIFeatures');
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
 const AppError = require('./../utils/AppError');
 
-exports.checkID = async (req, res, next) => {
+exports.doesIdExist = async (req, res, next) => {
   const spaceExist = await Space.findById(req.params.id);
   if (!spaceExist) {
     return next(new AppError('No Space found with that ID', 404));

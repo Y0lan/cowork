@@ -11,7 +11,12 @@ router
   .post(spaceController.incrementID, spaceController.createOneSpace);
 router
   .route('/:id')
-  .get(spaceController.checkID, spaceController.getOneSpace)
-  .delete(spaceController.checkID, spaceController.deleteOneSpace)
-  .patch(spaceController.checkID, spaceController.updateOneSpace);
+  .get(spaceController.doesIdExist, spaceController.getOneSpace)
+  .delete(
+    spaceController.doesIdExist,
+    authentificationController.protect,
+    authentificationController.restrictTo('admin'),
+    spaceController.deleteOneSpace
+  )
+  .patch(spaceController.doesIdExist, spaceController.updateOneSpace);
 module.exports = router;

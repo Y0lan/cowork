@@ -92,3 +92,24 @@ exports.protect = catchAsynchronousError(async (req, res, next) => {
   req.user = loggedUser;
   next();
 });
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have enough permission to perform this.', 403)
+      );
+    }
+    next();
+  };
+};
+
+exports.forgotPassword = catchAsynchronousError(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) return next(new AppError('Email incorrect', 404));
+  const resetToken = user.createPasswordResetToken();
+
+  // to accept only the email field in user.save
+  await user.save({ validateBeforeSave: false });
+});
+exports.resetPassword = async (req, res, next) => {};
