@@ -1,2 +1,8 @@
 //TODO implement email validation when signing up
 //TODO implement email validation when changing email
+//TODO implement maximum login attempt
+//TODO prevent cross site request forgery
+//TODO require re authentification before a high value action
+//TODO implement a blacklist of untrusted jwt
+//TODO keep user logged in with refresh token
+//TODO implement two factor auth
