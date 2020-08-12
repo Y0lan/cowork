@@ -8,15 +8,15 @@ router.route('/available-spaces').get(spaceController.getAllSpaces);
 router
   .route('/')
   .get(authentificationController.protect, spaceController.getAllSpaces)
-  .post(spaceController.incrementID, spaceController.createOneSpace);
+  .post(spaceController.createOneSpace);
 router
   .route('/:id')
-  .get(spaceController.doesIdExist, spaceController.getOneSpace)
+  .get(spaceController.isIDValid, spaceController.getOneSpace)
   .delete(
-    spaceController.doesIdExist,
+    spaceController.isIDValid,
     authentificationController.protect,
     authentificationController.restrictTo('admin'),
     spaceController.deleteOneSpace
   )
-  .patch(spaceController.doesIdExist, spaceController.updateOneSpace);
+  .patch(spaceController.isIDValid, spaceController.updateOneSpace);
 module.exports = router;

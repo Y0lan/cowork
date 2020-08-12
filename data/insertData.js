@@ -38,5 +38,6 @@ const importSpaces = async () => {
     console.log(err.message);
   }
 };
-deleteAllSpaces();
-//importSpaces();
+
+if(process.argv[2] === '-i') importSpaces();
+if(process.argv[2] === '-d') deleteAllSpaces();

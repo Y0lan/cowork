@@ -6,12 +6,6 @@ const { promisify } = require('util');
 const sendEmail = require('./../utils/email');
 const crypto = require('crypto');
 
-exports.incrementID = async (req, res, next) => {
-  const total = await User.countDocuments();
-  req.body._id = total + 1;
-  next();
-};
-
 const signJWT = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -28,7 +22,7 @@ const createSendToken = (user, statusCode, res) => {
   };
   if (process.env.NODE_ENV === 'prod') cookiesOption.secure = true;
   res.cookie('jwt', token, cookiesOption);
-  user.password = undefined
+  user.password = undefined;
   res.status(statusCode).json({
     status: 'success',
     token,

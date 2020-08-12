@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.post(
   '/signup',
-  authentificationController.incrementID,
   authentificationController.signup
 );
 

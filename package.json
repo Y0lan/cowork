@@ -37,6 +37,7 @@
     "node": ">=10.0.0"
   },
   "devDependencies": {
+    "bson": "^4.1.0",
     "helmet": "^4.0.0",
     "nodemailer": "^6.4.11",
     "xss-clean": "^0.1.1"

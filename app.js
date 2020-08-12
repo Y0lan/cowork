@@ -9,6 +9,7 @@ const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controllers/errorController');
 const spacesRouter = require('./routes/spaceRoutes');
 const usersRouter = require('./routes/userRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 
 const app = express();
 
@@ -51,6 +52,7 @@ if (process.env.NODE_ENV === 'dev') app.use(morgan('dev'));
 // ROUTE
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/spaces', spacesRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));

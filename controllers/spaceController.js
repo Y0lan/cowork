@@ -1,19 +1,20 @@
 const Space = require('./../models/spaceModel');
+const bson = require('bson')
 const APIFeatures = require('../utils/APIFeatures');
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
 const AppError = require('./../utils/AppError');
 
-exports.doesIdExist = async (req, res, next) => {
-  const spaceExist = await Space.findById(req.params.id);
-  if (!spaceExist) {
-    return next(new AppError('No Space found with that ID', 404));
+exports.isIDValid = async (req, res, next) => {
+  const id = req.params.id;
+  if(!bson.ObjectID.isValid(id)) {
+    return next(new AppError(id + ' is not a valid ObjectId', 400))
   }
-  next();
-};
-
-exports.incrementID = async (req, res, next) => {
-  const total = await Space.countDocuments();
-  req.body._id = total + 1;
+  const validID = await Space.findById(id);
+  if (!validID) {
+    return next(
+      new AppError('Nothing found with the id' + String(id), 404)
+    );
+  }
   next();
 };
 
@@ -34,15 +35,14 @@ exports.getAllSpaces = catchAsynchronousError(async (req, res, next) => {
 });
 
 exports.getOneSpace = catchAsynchronousError(async (req, res, next) => {
-  const id = req.params.id * 1;
-  const space = await Space.findById(id);
+  const id = req.params.id;
+  const space = await Space.findById(id).populate('reviews');
   res.status(200).json({
     status: 'success',
     data: {
       space,
     },
   });
-  res.send();
 });
 
 exports.createOneSpace = catchAsynchronousError(async (req, res, next) => {
@@ -69,7 +69,7 @@ exports.updateOneSpace = catchAsynchronousError(async (req, res, next) => {
 });
 
 exports.deleteOneSpace = catchAsynchronousError(async (req, res, next) => {
-  const id = req.params.id * 1;
+  const id = req.params.id;
   const space = await Space.findByIdAndDelete(id);
   res.status(201).json({
     status: 'success',
