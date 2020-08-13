@@ -1,16 +1,9 @@
 const Review = require('./../models/reviewModel');
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
 const AppError = require('./../utils/AppError');
+const isIDValid = require('./../utils/isIDValid');
 
-exports.isIDValid = catchAsynchronousError(async (req, res, next) => {
-  const validID = await Review.findById(req.params.id);
-  if (!validID) {
-    return next(
-      new AppError('Nothing found with the id: ' + req.params.id, 404)
-    );
-  }
-  next();
-});
+exports.isIDValid = isIDValid(Review);
 
 exports.getAllReviews = catchAsynchronousError(async (req, res, next) => {
   const reviews = await Review.find({});

@@ -1,23 +1,9 @@
 const Space = require('./../models/spaceModel');
-const bson = require('bson')
 const APIFeatures = require('../utils/APIFeatures');
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
-const AppError = require('./../utils/AppError');
+const isIDValid = require('./../utils/isIDValid');
 
-exports.isIDValid = async (req, res, next) => {
-  const id = req.params.id;
-  if(!bson.ObjectID.isValid(id)) {
-    return next(new AppError(id + ' is not a valid ObjectId', 400))
-  }
-  const validID = await Space.findById(id);
-  if (!validID) {
-    return next(
-      new AppError('Nothing found with the id' + String(id), 404)
-    );
-  }
-  next();
-};
-
+exports.isIDValid = isIDValid(Space);
 exports.getAllSpaces = catchAsynchronousError(async (req, res, next) => {
   const features = new APIFeatures(Space.find(), req.query)
     .filter()

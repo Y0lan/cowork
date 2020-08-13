@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('./advancedFiltering');
 class APIFeatures {
   constructor(query, queryString) {
     this.query = query;
