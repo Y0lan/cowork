@@ -13,7 +13,12 @@ router
     spaceController.isIDValid,
     authentificationController.protect,
     authentificationController.restrictTo('user'),
+    reviewController.setIDs,
     reviewController.createReview
   );
+
+router.route('/:id')
+  .patch(reviewController.isIDValid, reviewController.updateOneReview)
+  .delete(reviewController.isIDValid, reviewController.deleteOneReview)
 
 module.exports = router;

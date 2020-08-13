@@ -3,10 +3,7 @@ const userController = require('./../controllers/userController');
 const authentificationController = require('./../controllers/authentificationController');
 const router = express.Router();
 
-router.post(
-  '/signup',
-  authentificationController.signup
-);
+router.post('/signup', authentificationController.signup);
 
 router.post('/login', authentificationController.login);
 router.post('/forgotPassword', authentificationController.forgotPassword);
@@ -32,11 +29,11 @@ router.delete(
 router
   .route('/')
   .get(userController.getAllUsers)
-  .post(userController.createUser);
 
 router
   .route('/:id')
-  .get(userController.getOneUser)
-  .delete(userController.deleteOneUser)
-  .patch(userController.modifyOneUser);
+  .get(userController.isIDValid, userController.getOneUser)
+  .delete(userController.isIDValid, userController.deleteOneUser)
+  .patch(userController.isIDValid, userController.updateOneUser);
+
 module.exports = router;
