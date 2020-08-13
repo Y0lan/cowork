@@ -4,7 +4,9 @@ const catchAsynchronousError = require('../utils/catchAsynchronousError');
 
 const isIDValid = (model) => {
   return catchAsynchronousError(async (req, res, next) => {
-      const id = req.params.id;
+      const id = req.params.id ||
+        req.params.spaceID ||
+      req.params.reviewID;
       if (!bson.ObjectID.isValid(id)) {
         return next(new AppError(id + ' is not a valid ObjectId', 400));
       }

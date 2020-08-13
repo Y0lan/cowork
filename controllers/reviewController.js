@@ -16,21 +16,9 @@ exports.getAllReviews = catchAsynchronousError(async (req, res, next) => {
   });
 });
 
-exports.getAllReviewsOfASpecificSpace = catchAsynchronousError(
-  async (req, res, next) => {
-    const space = req.params.id;
-    const reviews = await Review.find({ space });
-    res.status(200).json({
-      status: 'success',
-      length: reviews.length,
-      data: {
-        reviews,
-      },
-    });
-  }
-);
-
 exports.createReview = catchAsynchronousError(async (req, res, next) => {
+  if (!req.body.space) req.body.space = req.params.spaceID;
+  if (!req.body.user) req.body.user = req.user.id;
   req.body.user = req.user.id;
   const review = await Review.create(req.body);
   res.status(201).json({
