@@ -8,7 +8,7 @@ const router = express.Router({
 
 router
   .route('/')
-  .get(reviewController.getAllReviews)
+  .get(spaceController.isIDValid, reviewController.getAllReview)
   .post(
     spaceController.isIDValid,
     authentificationController.protect,
@@ -16,9 +16,23 @@ router
     reviewController.setIDs,
     reviewController.createReview
   );
-
-router.route('/:id')
-  .patch(reviewController.isIDValid, reviewController.updateOneReview)
-  .delete(reviewController.isIDValid, reviewController.deleteOneReview)
+router.use(authentificationController.protect);
+router
+  .route('/:id')
+  .patch(
+    reviewController.isIDValid,
+    reviewController.checkUserPermission,
+    reviewController.updateOneReview
+  )
+  .delete(
+    reviewController.isIDValid,
+    reviewController.checkUserPermission,
+    reviewController.deleteOneReview
+  )
+  .get(
+    reviewController.isIDValid,
+    reviewController.checkUserPermission,
+    reviewController.getOneReview
+  );
 
 module.exports = router;

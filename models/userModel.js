@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   photo: {
     type: String,
+    default: 'no-picture'
   },
   //TODO faire "confirmer votre password" en front
   password: {

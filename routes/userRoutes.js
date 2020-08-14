@@ -8,27 +8,19 @@ router.post('/signup', authentificationController.signup);
 router.post('/login', authentificationController.login);
 router.post('/forgotPassword', authentificationController.forgotPassword);
 router.patch('/resetPassword/:token', authentificationController.resetPassword);
-router.patch(
-  '/updateMyPassword',
-  authentificationController.protect,
-  authentificationController.updateMyPassword
-);
 
-router.patch(
-  '/updateMe',
-  authentificationController.protect,
-  userController.updateMe
-);
+// All the route below will need you to be LOGGED IN.
+router.use(authentificationController.protect);
 
-router.delete(
-  '/deleteMe',
-  authentificationController.protect,
-  userController.deleteMe
-);
+router.patch('/updateMyPassword', authentificationController.updateMyPassword);
+router.get('/me', userController.getMe, userController.getOneUser);
+router.patch('/updateMe', userController.updateMe);
+router.delete('/deleteMe', userController.deleteMe);
 
-router
-  .route('/')
-  .get(userController.getAllUsers)
+// All the route below will need you to be ADMIN.
+router.use(authentificationController.restrictTo('admin'))
+
+router.route('/').get(userController.getAllUser);
 
 router
   .route('/:id')

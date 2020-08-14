@@ -4,16 +4,19 @@ const authentificationController = require('./../controllers/authentificationCon
 const reviewRouter = require('./reviewRoutes');
 const router = express.Router();
 
+router.use('/:spaceID/reviews', reviewRouter);
 
-router.use('/:spaceID/reviews', reviewRouter)
-
-
-router.route('/available-spaces').get(spaceController.getAllSpaces);
+//TODO add middleware here
+router.route('/available-spaces').get(spaceController.getAllSpace);
 
 router
   .route('/')
-  .get(authentificationController.protect, spaceController.getAllSpaces)
-  .post(spaceController.createOneSpace);
+  .get(spaceController.getAllSpace)
+  .post(
+    authentificationController.protect,
+    authentificationController.restrictTo('admin'),
+    spaceController.createOneSpace
+  );
 router
   .route('/:id')
   .get(spaceController.isIDValid, spaceController.getOneSpace)
@@ -23,6 +26,11 @@ router
     authentificationController.restrictTo('admin'),
     spaceController.deleteOneSpace
   )
-  .patch(spaceController.isIDValid, spaceController.updateOneSpace);
+  .patch(
+    authentificationController.protect,
+    authentificationController.restrictTo('admin'),
+    spaceController.isIDValid,
+    spaceController.updateOneSpace
+  );
 
 module.exports = router;

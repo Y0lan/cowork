@@ -6,3 +6,4 @@
 //TODO implement a blacklist of untrusted jwt
 //TODO keep user logged in with refresh token
 //TODO implement two factor auth
+//TODO implement logout
