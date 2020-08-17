@@ -1,5 +1,6 @@
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
 const APIFeatures = require('../utils/APIFeatures');
+const bson = require('bson')
 
 exports.deleteOne = (Model) =>
   catchAsynchronousError(async (req, res) => {
@@ -66,6 +67,7 @@ exports.getAll = (Model) =>
     // pour permettre les router nesté pour GET les reviews
     let filter = {};
     if (req.params.spaceID) filter = { space: req.params.spaceID };
+    if(req.params.userID) filter = { user : req.params.userID}
     console.log(filter);
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()

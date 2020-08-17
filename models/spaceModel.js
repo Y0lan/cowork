@@ -32,6 +32,8 @@ const spaceSchema = new mongoose.Schema(
       default: 4.5,
       min: [1, 'Rating must be above 1.0'],
       max: [5, 'Rating must be below 5.0'],
+      // Math.round return int and we want float
+      set: rating => Math.round(rating * 10) / 10
     },
     ratingsQuantity: {
       type: Number,
@@ -119,6 +121,37 @@ const spaceSchema = new mongoose.Schema(
   }
 );
 
+spaceSchema.index({
+  full: 1,
+})
+ spaceSchema.index({
+   number_of_laptop: -1,
+ })
+
+spaceSchema.index({
+  number_of_printers: -1,
+})
+
+spaceSchema.index({
+  number_of_call_room: -1,
+})
+
+spaceSchema.index({
+  number_of_room_conference: -1,
+})
+
+spaceSchema.index({
+  number_of_cosy_room: -1,
+})
+
+spaceSchema.index({
+  ratingsAverage: 1
+})
+
+spaceSchema.index({
+  slug: 1
+})
+
 spaceSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
@@ -129,6 +162,7 @@ spaceSchema.virtual('reviews', {
   foreignField: 'space',
   localField: '_id'
 })
+
 
 const Space = mongoose.model('Space', spaceSchema);
 module.exports = Space;

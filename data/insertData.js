@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Space = require('./../models/spaceModel');
+const Review = require('./../models/reviewModel');
 const dotenv = require('dotenv');
 const fs = require('fs');
 dotenv.config({ path: './config.env' });
@@ -28,6 +29,15 @@ const deleteAllSpaces = async () => {
     console.log(err.message);
   }
 };
+const deleteAllReviews = async () => {
+  try {
+    await Review.deleteMany();
+    console.log('successfully deleted');
+    return true;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 const spaces = JSON.parse(fs.readFileSync(`${__dirname}/spaces.json`, 'utf-8'));
 
 const importSpaces = async () => {
@@ -39,5 +49,6 @@ const importSpaces = async () => {
   }
 };
 
-if(process.argv[2] === '-i') importSpaces();
-if(process.argv[2] === '-d') deleteAllSpaces();
+if(process.argv[2] === '-is') importSpaces();
+if(process.argv[2] === '-ds') deleteAllSpaces();
+if(process.argv[2] === '-dr') deleteAllReviews();

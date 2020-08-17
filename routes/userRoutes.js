@@ -1,8 +1,10 @@
 const express = require('express');
 const userController = require('./../controllers/userController');
 const authentificationController = require('./../controllers/authentificationController');
+const reviewRouter = require('./reviewRoutes');
 const router = express.Router();
 
+router.use('/:userID/reviews', reviewRouter);
 router.post('/signup', authentificationController.signup);
 
 router.post('/login', authentificationController.login);
