@@ -7,7 +7,12 @@ const router = express.Router();
 router.use('/:spaceID/reviews', reviewRouter);
 
 //TODO add middleware here
-router.route('/available-spaces').get(spaceController.getAllSpace);
+router.route('/available-spaces')
+  .get(spaceController.getAllSpace);
+router.route('/space-within/:distance/center/:coordinates/unit/:unit')
+  .get(spaceController.getSpaceWithin)
+router.route('/distance/:coordinates/unit/:unit')
+  .get(spaceController.getDistance)
 
 router
   .route('/')

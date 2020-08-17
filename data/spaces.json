@@ -1,11 +1,11 @@
 [
   {
     "name": "CoWork Bastille",
-    "address": {
+    "location": {
       "city": "Paris, France",
       "type": "Point",
-      "coordinates": [-80,25],
-      "address": "275 rue du Faubourg Saint Antoine, 75011"
+      "coordinates": [ 2.372232, 48.853975],
+      "address": "21-1 Rue de Lappe, 75011"
     },
     "images": [],
     "open_time_monday_thursday": ["09:00", "20:00"],
@@ -25,11 +25,12 @@
     "summary": "summary"
   },
   {
-    "name": "Cowork République", "address": {
-    "city": "Paris, France",
-    "type": "Point",
-    "coordinates": [-80,25],
-    "address": "275 rue du Faubourg Saint Antoine, 75011"
+    "name": "Cowork République",
+    "location": {
+      "city": "Paris, France",
+      "type": "Point",
+      "coordinates": [2.364940, 48.869343],
+      "address": "6-26 Rue Léon Jouhaux, 75010"
   },
     "images": [],
     "open_time_monday_thursday": ["08:00", "21:00"],
@@ -50,11 +51,11 @@
   },
   {
     "name": "Cowork Odéon",
-    "address": {
+    "location": {
       "city": "Paris, France",
       "type": "Point",
-      "coordinates": [-80,25],
-      "address": "275 rue du Faubourg Saint Antoine, 75011"
+      "coordinates": [2.331244, 48.852472],
+      "address": "38-56 Rue du Four, 75006"
     },
     "images": [],
     "open_time_monday_thursday": ["09:00", "20:00"],
@@ -75,12 +76,13 @@
   },
   {
     "name": "Cowork Place d'italie",
-    "address": {
+    "location": {
       "city": "Paris, France",
       "type": "Point",
-      "coordinates": [-80,25],
-      "address": "275 rue du Faubourg Saint Antoine, 75011"
-    },"images": [],
+      "coordinates": [2.355814,48.834066],
+      "address": "15 Rue Rubens, 75013"
+    },
+    "images": [],
     "open_time_monday_thursday": ["09:00", "20:00"],
     "open_time_friday": ["09:00", "20:00"],
     "open_time_week_end": ["11:00", "20:00"],
@@ -99,12 +101,13 @@
   },
   {
     "name": "Cowork Ternes",
-    "address": {
+    "location": {
       "city": "Paris, France",
       "type": "Point",
-      "coordinates": [-80,25],
-      "address": "275 rue du Faubourg Saint Antoine, 75011"
-    },"images": [],
+      "coordinates": [ 2.296361, 48.882010],
+      "address": "39-35 Rue Pierre Demours, 75017"
+    },
+    "images": [],
     "open_time_monday_thursday": ["08:00", "21:00"],
     "open_time_friday": ["09:00", "23:00"],
     "open_time_week_end": ["°9:00", "20:00"],
@@ -123,12 +126,13 @@
   },
   {
     "name": "Cowork Beaubourg",
-    "address": {
+    "location": {
       "city": "Paris, France",
       "type": "Point",
-      "coordinates": [-80,25],
-      "address": "275 rue du Faubourg Saint Antoine, 75011"
-    },"images": [],
+      "coordinates": [2.356179, 48.863436],
+      "address": "10-30 Rue Chapon, 75003 Paris"
+    },
+    "images": [],
     "open_time_monday_thursday": ["09:00", "20:00"],
     "open_time_friday": ["09:00", "20:00"],
     "open_time_week_end": ["11:00", "20:00"],

@@ -13,7 +13,7 @@ const spaceSchema = new mongoose.Schema(
       type: 'String',
       trim: true,
     },
-    address: {
+    location: {
       type: {
         type: String,
         default: 'Point',
@@ -21,7 +21,7 @@ const spaceSchema = new mongoose.Schema(
       },
       coordinates: [Number],
       city: String,
-      description: String,
+      address: String,
     },
     maxGroupSize: {
       type: Number,
@@ -150,6 +150,10 @@ spaceSchema.index({
 
 spaceSchema.index({
   slug: 1
+})
+
+spaceSchema.index({
+  location: '2dsphere'
 })
 
 spaceSchema.pre('save', function (next) {
