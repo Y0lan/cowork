@@ -10,7 +10,7 @@ const checkID = catchAsynchronousError(async (id, Model, next) => {
   const document = await Model.findById(id);
   if (!document) {
     return next(
-      new AppError('No document found with the id' + String(id), 404)
+      new AppError('No document found with the id: ' + String(id), 404)
     );
   }
   return false;
