@@ -1,7 +1,5 @@
 const bson = require('bson');
 const AppError = require('./../utils/AppError');
-const Space = require('./../models/spaceModel');
-const User = require('./../models/userModel');
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
 const checkID = catchAsynchronousError(async (id, Model, next) => {
   if (!bson.ObjectID.isValid(id)) {
@@ -16,17 +14,15 @@ const checkID = catchAsynchronousError(async (id, Model, next) => {
   return false;
 });
 const isIDValid = (Model) => {
-  return catchAsynchronousError(async (req, res, next) => {
-    let failed = undefined;
-    if (req.params.id) failed = await checkID(req.params.id, Model, next);
-    if (failed) return failed;
-    if (req.params.spaceID) failed = await checkID(req.params.spaceID, Space, next);
-    if (failed) return failed;
-    if (req.params.userID) failed = await checkID(req.params.userID, User, next);
-    if (failed) return failed;
-
-    next();
-  });
+  return (...ids) => {
+    return catchAsynchronousError(async (req, res, next) => {
+      for (const id of ids) {
+        const nextWithErrorMessage = await checkID(req.params.id, Model, next);
+        if (nextWithErrorMessage) return nextWithErrorMessage;
+      }
+      next();
+    });
+  }
 };
 
 module.exports = isIDValid;

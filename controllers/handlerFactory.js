@@ -68,7 +68,6 @@ exports.getAll = (Model) =>
     let filter = {};
     if (req.params.spaceID) filter = { space: req.params.spaceID };
     if(req.params.userID) filter = { user : req.params.userID}
-    console.log(filter);
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()

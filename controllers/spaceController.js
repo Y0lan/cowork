@@ -72,7 +72,6 @@ exports.getDistance = catchAsynchronousError( async (req, res, next) => {
       }
     }
   ])
-  console.log(longitude, latitude, distance);
   res.status(200).json({
     status: 'success',
     data: {
@@ -82,11 +81,12 @@ exports.getDistance = catchAsynchronousError( async (req, res, next) => {
 });
 
 
-exports.isIDValid = isIDValid(Space);
+
 exports.getAllSpace = factory.getAll(Space);
 exports.getOneSpace = factory.getOne(Space, { path: 'reviews' });
 exports.updateOneSpace = factory.updateOne(Space);
 exports.deleteOneSpace = factory.deleteOne(Space);
+exports.isIDValid = isIDValid(Space)
 
 exports.getSpacesStatistics = catchAsynchronousError(async (req, res, next) => {
   //TODO tout le bordel des stats loool

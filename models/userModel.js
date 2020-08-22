@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
   passwordLastChangedAt: Date,
   role: {
     type: String,
-    enum: ['user', 'admin'],
+    enum: ['user', 'mentor', 'admin'],
     default: 'user',
   },
   passwordResetToken: String,

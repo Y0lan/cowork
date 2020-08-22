@@ -8,9 +8,10 @@ const router = express.Router({
 
 router
   .route('/')
-  .get(spaceController.isIDValid, reviewController.getAllReview)
+  .get(reviewController.getAllReview)
   .post(
-    spaceController.isIDValid,
+    // spaceID is from routes/spaceRoutes.js
+    spaceController.isIDValid('spaceID'),
     authentificationController.protect,
     authentificationController.restrictTo('user'),
     reviewController.setIDs,
@@ -20,17 +21,17 @@ router.use(authentificationController.protect);
 router
   .route('/:id')
   .patch(
-    reviewController.isIDValid,
+    reviewController.isIDValid('id'),
     reviewController.checkUserPermission,
     reviewController.updateOneReview
   )
   .delete(
-    reviewController.isIDValid,
+    reviewController.isIDValid('id'),
     reviewController.checkUserPermission,
     reviewController.deleteOneReview
   )
   .get(
-    reviewController.isIDValid,
+    reviewController.isIDValid('id'),
     reviewController.checkUserPermission,
     reviewController.getOneReview
   );

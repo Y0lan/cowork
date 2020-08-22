@@ -14,6 +14,7 @@ router.route('/space-within/:distance/center/:coordinates/unit/:unit')
 router.route('/distance/:coordinates/unit/:unit')
   .get(spaceController.getDistance)
 
+
 router
   .route('/')
   .get(spaceController.getAllSpace)
@@ -26,7 +27,7 @@ router
   .route('/:id')
   .get(spaceController.isIDValid, spaceController.getOneSpace)
   .delete(
-    spaceController.isIDValid,
+    spaceController.isIDValid('id'),
     authentificationController.protect,
     authentificationController.restrictTo('admin'),
     spaceController.deleteOneSpace
@@ -34,8 +35,15 @@ router
   .patch(
     authentificationController.protect,
     authentificationController.restrictTo('admin'),
-    spaceController.isIDValid,
+    spaceController.isIDValid('id'),
     spaceController.updateOneSpace
   );
+
+router.route('/:spaceID/mentors/:mentorsID').post(
+  authentificationController.protect,
+  authentificationController.restrictTo('admin'),
+  spaceController.isIDValid('id', 'mentorsID'),
+
+)
 
 module.exports = router;

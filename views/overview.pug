@@ -1,0 +1,40 @@
+extends base
+block content
+    main.main
+        .card-container
+
+            each space in spaces
+                .card
+                    .card__header
+                        .card__picture
+                            .card__picture-overlay &nbsp;
+                            img.card__picture-img(src=`/img/spaces/${space.imageCover}`, alt=`${space.name}`)
+                        h3.heading-tertirary
+                            span= space.name
+
+                    .card__details
+                            p.card__text= space.summary
+                            .card__data
+                                svg.card__icon
+                                    use(xlink:href='/img/icons.svg#icon-map-pin')
+                                span= space.location.address
+                            .card__data
+                                svg.card__icon
+                                    use(xlink:href='/img/icons.svg#icon-clock')
+                                span= `week time: ${space.open_time_monday_thursday[0]} ${space.open_time_monday_thursday[1]}`
+                            .card__data
+                                svg.card__icon
+                                    use(xlink:href='/img/icons.svg#icon-flag')
+                                span= space.location.city
+                            .card__data
+                                svg.card.card__icon
+                                    use(xlink:hre='/img/icons.svg#icon-clock')
+                                span= `weekend: ${space.open_time_week_end[0]} ${space.open_time_week_end[1]}`
+
+                    .card__footer
+                        p.card__ratings
+                            span.card__footer-value= space.ratingsAverage
+                            |
+                            span.card__footer-text= ` rating (${space.ratingsQuantity})`
+                        a.btn.btn--green.btn--small(href=`/space/${space.slug}`) Details
+

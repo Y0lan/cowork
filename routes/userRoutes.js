@@ -26,8 +26,8 @@ router.route('/').get(userController.getAllUser);
 
 router
   .route('/:id')
-  .get(userController.isIDValid, userController.getOneUser)
-  .delete(userController.isIDValid, userController.deleteOneUser)
-  .patch(userController.isIDValid, userController.updateOneUser);
+  .get(userController.isIDValid('id'), userController.getOneUser)
+  .delete(userController.isIDValid('id'), userController.deleteOneUser)
+  .patch(userController.isIDValid('id'), userController.updateOneUser);
 
 module.exports = router;

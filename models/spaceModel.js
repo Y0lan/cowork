@@ -110,6 +110,12 @@ const spaceSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    mentors: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
+    ],
     available_seat: {
       type: Number,
     },
@@ -160,6 +166,14 @@ spaceSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
+
+spaceSchema.pre(/^find/, function() {
+  this.populate({
+    path: 'mentors',
+    select: '-__v -passwordChangedAt'
+  });
+});
+
 
 spaceSchema.virtual('reviews', {
   ref: 'Review',
