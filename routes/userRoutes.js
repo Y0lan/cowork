@@ -2,6 +2,7 @@ const express = require('express');
 const userController = require('./../controllers/userController');
 const authentificationController = require('./../controllers/authentificationController');
 const reviewRouter = require('./reviewRoutes');
+const spaceController = require('../controllers/reviewController');
 const router = express.Router();
 
 router.use('/:userID/reviews', reviewRouter);
@@ -20,9 +21,10 @@ router.patch('/updateMe', userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
 
 // All the route below will need you to be ADMIN.
-router.use(authentificationController.restrictTo('admin'))
+router.use(authentificationController.restrictTo('admin'));
 
 router.route('/').get(userController.getAllUser);
+router.route('/mentors').get(userController.getAllMentors);
 
 router
   .route('/:id')
@@ -30,4 +32,16 @@ router
   .delete(userController.isIDValid('id'), userController.deleteOneUser)
   .patch(userController.isIDValid('id'), userController.updateOneUser);
 
+router
+  .route('/:userID/mentor/:spaceID')
+  .patch(
+    spaceController.isIDValid('spaceID'),
+    userController.isIDValid('userID'),
+    userController.makeMentor
+  )
+  .delete(
+    spaceController.isIDValid('spaceID'),
+    userController.isIDValid('userID'),
+    userController.makeUser
+  );
 module.exports = router;

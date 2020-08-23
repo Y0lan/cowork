@@ -7,13 +7,13 @@ const router = express.Router();
 router.use('/:spaceID/reviews', reviewRouter);
 
 //TODO add middleware here
-router.route('/available-spaces')
-  .get(spaceController.getAllSpace);
-router.route('/space-within/:distance/center/:coordinates/unit/:unit')
-  .get(spaceController.getSpaceWithin)
-router.route('/distance/:coordinates/unit/:unit')
-  .get(spaceController.getDistance)
-
+router.route('/available-spaces').get(spaceController.getAllSpace);
+router
+  .route('/space-within/:distance/center/:coordinates/unit/:unit')
+  .get(spaceController.getSpaceWithin);
+router
+  .route('/distance/:coordinates/unit/:unit')
+  .get(spaceController.getDistance);
 
 router
   .route('/')
@@ -25,7 +25,7 @@ router
   );
 router
   .route('/:id')
-  .get(spaceController.isIDValid, spaceController.getOneSpace)
+  .get(spaceController.isIDValid('id'), spaceController.getOneSpace)
   .delete(
     spaceController.isIDValid('id'),
     authentificationController.protect,
@@ -38,12 +38,5 @@ router
     spaceController.isIDValid('id'),
     spaceController.updateOneSpace
   );
-
-router.route('/:spaceID/mentors/:mentorsID').post(
-  authentificationController.protect,
-  authentificationController.restrictTo('admin'),
-  spaceController.isIDValid('id', 'mentorsID'),
-
-)
 
 module.exports = router;

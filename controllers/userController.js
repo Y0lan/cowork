@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Space = require('./../models/spaceModel');
 const AppError = require('./../utils/AppError');
 const catchAsynchronousError = require('./../utils/catchAsynchronousError');
 const isIDValid = require('./../utils/isIDValid');
@@ -49,6 +50,79 @@ exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
+
+exports.getAllMentors = catchAsynchronousError(async (req, res, next) => {
+  const users = await User.find({ role: 'mentor' });
+  if (!users) {
+    return next(new AppError('There is no mentor', 400));
+  }
+  res.status(200).json({
+    status: 'success',
+    result: users.length,
+    data: {
+      users,
+    },
+  });
+});
+
+exports.makeMentor = catchAsynchronousError(async (req, res, next) => {
+  // make mentor
+  const user = await User.findByIdAndUpdate(
+    req.params.userID,
+    {
+      role: 'mentor',
+    },
+    {
+      new: true,
+    }
+  );
+  if (!user) {
+    return next(new AppError('Could not change role to mentor', 400));
+  }
+
+  // add mentor to space
+  const space = await Space.findById(req.params.spaceID);
+
+  if (!space) {
+    return next(
+      new AppError('Could not add mentor to space but user was updated', 400)
+    );
+  }
+  space.mentors.push(req.params.id);
+  space.save();
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user,
+      space,
+    },
+  });
+});
+
+exports.makeUser = catchAsynchronousError(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      role: 'user',
+    },
+    {
+      new: true,
+    }
+  );
+
+  if (!user) {
+    return next(new AppError('Could not change role to user', 400));
+  }
+
+  const space = await Space.find({}); // TODO ???
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user,
+    },
+  });
+});
 
 exports.getAllUser = factory.getAll(User);
 exports.getOneUser = factory.getOne(User);

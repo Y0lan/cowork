@@ -8,7 +8,10 @@ const router = express.Router({
 
 router
   .route('/')
-  .get(reviewController.getAllReview)
+  // spaceID is from routes/spaceRoutes.js
+  .get(
+    spaceController.isIDValid('spaceID'),
+    reviewController.getAllReview)
   .post(
     // spaceID is from routes/spaceRoutes.js
     spaceController.isIDValid('spaceID'),

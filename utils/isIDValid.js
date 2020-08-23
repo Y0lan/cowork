@@ -17,12 +17,12 @@ const isIDValid = (Model) => {
   return (...ids) => {
     return catchAsynchronousError(async (req, res, next) => {
       for (const id of ids) {
-        const nextWithErrorMessage = await checkID(req.params.id, Model, next);
+        const nextWithErrorMessage = await checkID(req.params[`${id}`], Model, next);
         if (nextWithErrorMessage) return nextWithErrorMessage;
       }
       next();
     });
-  }
+  };
 };
 
 module.exports = isIDValid;
