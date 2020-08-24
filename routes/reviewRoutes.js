@@ -6,12 +6,15 @@ const router = express.Router({
   mergeParams: true,
 });
 
+router.use(authentificationController.protect);
+
 router
   .route('/')
   // spaceID is from routes/spaceRoutes.js
   .get(
     spaceController.isIDValid('spaceID'),
-    reviewController.getAllReview)
+    reviewController.getAllReviewOfOneSpace
+  )
   .post(
     // spaceID is from routes/spaceRoutes.js
     spaceController.isIDValid('spaceID'),
@@ -20,7 +23,6 @@ router
     reviewController.setIDs,
     reviewController.createReview
   );
-router.use(authentificationController.protect);
 router
   .route('/:id')
   .patch(

@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   photo: {
     type: String,
-    default: 'no-picture'
+    default: 'no-picture',
   },
   //TODO faire "confirmer votre password" en front
   password: {
@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
     select: false,
+  },
+  space: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Space',
   },
 });
 
@@ -89,6 +93,13 @@ userSchema.methods.createPasswordResetToken = function () {
 
   return resetToken;
 };
+
+userSchema.pre(/^find/, function () {
+  this.populate({
+    path: 'space',
+    select: 'name _id',
+  });
+});
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

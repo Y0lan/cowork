@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-const path = require('path')
+const path = require('path');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const xss = require('xss-clean');
@@ -16,7 +16,7 @@ const viewsRouter = require('./routes/viewsRoutes');
 const app = express();
 
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'views'));
 
 // serving static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -29,7 +29,7 @@ app.use(helmet());
 // limit request from same IP
 const limiter = rateLimit({
   max: 100,
-  windowMs: 60 * 60 * 1000,
+  windowMs: 60 * 60 * 1000, // 1h
   message: 'Too many requests from this IP, please try again in an hour',
 });
 
@@ -57,8 +57,7 @@ if (process.env.NODE_ENV === 'dev') app.use(morgan('dev'));
 
 // ROUTE
 
-
-app.use('/', viewsRouter)
+app.use('/', viewsRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/spaces', spacesRouter);
 app.use('/api/v1/reviews', reviewRouter);

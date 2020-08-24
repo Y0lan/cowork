@@ -19,7 +19,7 @@ exports.checkUserPermission = catchAsynchronousError(async (req, res, next) => {
   next();
 });
 
-exports.getAllReview = factory.getAll(Review);
+exports.getAllReviewOfOneSpace = factory.getAll(Review);
 exports.createReview = factory.create(Review);
 exports.deleteOneReview = factory.deleteOne(Review);
 exports.updateOneReview = factory.updateOne(Review);

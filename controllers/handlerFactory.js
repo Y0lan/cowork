@@ -64,18 +64,21 @@ exports.getOne = (Model, populateOptions) =>
 
 exports.getAll = (Model) =>
   catchAsynchronousError(async (req, res) => {
+    console.log(1);
     // TODO refacto ce hack
     // pour permettre les router nesté pour GET les reviews
     let filter = {};
     if (req.params.spaceID) filter = { space: req.params.spaceID };
     if (req.params.userID) filter = { user: req.params.userID };
+    console.log(req.query);
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
       .limit()
       .paginate();
-
+    console.log(2);
     const document = await features.query;
+    console.log(3);
     res.status(200).json({
       status: 'success',
       results: document.length,

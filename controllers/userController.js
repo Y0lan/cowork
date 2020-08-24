@@ -66,60 +66,71 @@ exports.getAllMentors = catchAsynchronousError(async (req, res, next) => {
 });
 
 exports.makeMentor = catchAsynchronousError(async (req, res, next) => {
+  const mentorID = req.params.mentorID;
+  const spaceID = req.params.spaceID;
+
   // make mentor
-  const user = await User.findByIdAndUpdate(
-    req.params.userID,
+
+  // obliger de passer spaceID en params et pas en body
+  // pour utiliser le middleware isIDValid
+  // C'est plus simple.
+
+  const space = await Space.findById(req.params.spaceID);
+
+  if (!space) {
+    return next(new AppError('Could not find a Space', 400));
+  }
+
+  const mentor = await User.findByIdAndUpdate(
+    mentorID,
     {
       role: 'mentor',
+      space: spaceID,
     },
     {
       new: true,
     }
   );
-  if (!user) {
+
+  if (!mentor) {
     return next(new AppError('Could not change role to mentor', 400));
   }
 
   // add mentor to space
-  const space = await Space.findById(req.params.spaceID);
-
-  if (!space) {
-    return next(
-      new AppError('Could not add mentor to space but user was updated', 400)
-    );
-  }
-  space.mentors.push(req.params.id);
+  space.mentors.push(mentorID);
   space.save();
+
+  // send response
   res.status(200).json({
     status: 'success',
     data: {
-      user,
+      user: mentor,
       space,
     },
   });
 });
 
 exports.makeUser = catchAsynchronousError(async (req, res, next) => {
-  const user = await User.findByIdAndUpdate(
-    req.params.id,
-    {
-      role: 'user',
-    },
-    {
-      new: true,
-    }
-  );
+  const userID = req.params.userID;
+  // getting mentor and space
+  const user = await User.findById(userID);
+  const spaceID = user.space;
+  const space = await Space.findById(spaceID);
 
-  if (!user) {
-    return next(new AppError('Could not change role to user', 400));
-  }
+  // removing the space from user
+  user.space = undefined;
+  user.role = 'user';
+  user.save();
 
-  const space = await Space.find({}); // TODO ???
+  // removing the mentor from space
+  space.mentors = space.mentors.filter((mentor) => mentor !== userID )
+  space.save()
 
-  res.status(200).json({
+  space.mentors.res.status(200).json({
     status: 'success',
     data: {
       user,
+      space
     },
   });
 });

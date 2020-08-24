@@ -32,16 +32,16 @@ router
   .delete(userController.isIDValid('id'), userController.deleteOneUser)
   .patch(userController.isIDValid('id'), userController.updateOneUser);
 
+router.route('/:id/mentor').delete(
+  userController.isIDValid('id'),
+  userController.makeUser
+)
+
 router
-  .route('/:userID/mentor/:spaceID')
+  .route('/:mentorID/mentor/:spaceID')
   .patch(
     spaceController.isIDValid('spaceID'),
-    userController.isIDValid('userID'),
+    userController.isIDValid('mentorID'),
     userController.makeMentor
-  )
-  .delete(
-    spaceController.isIDValid('spaceID'),
-    userController.isIDValid('userID'),
-    userController.makeUser
   );
 module.exports = router;
