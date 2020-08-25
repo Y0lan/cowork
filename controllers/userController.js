@@ -116,8 +116,13 @@ exports.makeUser = catchAsynchronousError(async (req, res, next) => {
   const userID = req.params.userID;
   // getting mentor and space
   const user = await User.findById(userID);
-  console.log(user);
   const spaceID = user.space;
+  if (!spaceID) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'can not set a User to user if he is not a mentor',
+    });
+  }
   const space = await Space.findById(spaceID);
 
   // removing the space from user
