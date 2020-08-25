@@ -97,8 +97,10 @@ exports.makeMentor = catchAsynchronousError(async (req, res, next) => {
   }
 
   // add mentor to space
-  space.mentors.push(mentorID);
-  space.save();
+  if (!space.mentors.some(({ _id }) => String(_id) === String(mentorID))) {
+    space.mentors.push(mentorID);
+    space.save();
+  }
 
   // send response
   res.status(200).json({
@@ -114,6 +116,7 @@ exports.makeUser = catchAsynchronousError(async (req, res, next) => {
   const userID = req.params.userID;
   // getting mentor and space
   const user = await User.findById(userID);
+  console.log(user);
   const spaceID = user.space;
   const space = await Space.findById(spaceID);
 
@@ -123,14 +126,16 @@ exports.makeUser = catchAsynchronousError(async (req, res, next) => {
   user.save();
 
   // removing the mentor from space
-  space.mentors = space.mentors.filter((mentor) => mentor !== userID )
-  space.save()
+  space.mentors = space.mentors.filter(
+    ({ _id }) => String(_id) !== String(userID)
+  );
+  space.save();
 
-  space.mentors.res.status(200).json({
+  res.status(200).json({
     status: 'success',
     data: {
       user,
-      space
+      space,
     },
   });
 });

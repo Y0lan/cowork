@@ -94,11 +94,14 @@ userSchema.methods.createPasswordResetToken = function () {
   return resetToken;
 };
 
-userSchema.pre(/^find/, function () {
-  this.populate({
-    path: 'space',
-    select: 'name _id',
-  });
+userSchema.pre(/^find/, function (next) {
+  if (this.space) {
+    this.populate({
+      path: 'space',
+      select: 'name',
+    });
+  }
+  next();
 });
 
 const User = mongoose.model('User', userSchema);

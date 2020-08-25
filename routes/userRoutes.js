@@ -2,7 +2,7 @@ const express = require('express');
 const userController = require('./../controllers/userController');
 const authentificationController = require('./../controllers/authentificationController');
 const reviewRouter = require('./reviewRoutes');
-const spaceController = require('../controllers/reviewController');
+const spaceController = require('../controllers/spaceController');
 const router = express.Router();
 
 router.use('/:userID/reviews', reviewRouter);
@@ -32,14 +32,13 @@ router
   .delete(userController.isIDValid('id'), userController.deleteOneUser)
   .patch(userController.isIDValid('id'), userController.updateOneUser);
 
-router.route('/:id/mentor').delete(
-  userController.isIDValid('id'),
-  userController.makeUser
-)
+router
+  .route('/:userID/mentor')
+  .delete(userController.isIDValid('userID'), userController.makeUser);
 
 router
   .route('/:mentorID/mentor/:spaceID')
-  .patch(
+  .put(
     spaceController.isIDValid('spaceID'),
     userController.isIDValid('mentorID'),
     userController.makeMentor

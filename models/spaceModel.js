@@ -33,7 +33,7 @@ const spaceSchema = new mongoose.Schema(
       min: [1, 'Rating must be above 1.0'],
       max: [5, 'Rating must be below 5.0'],
       // Math.round return int and we want float
-      set: rating => Math.round(rating * 10) / 10
+      set: (rating) => Math.round(rating * 10) / 10,
     },
     ratingsQuantity: {
       type: Number,
@@ -113,8 +113,8 @@ const spaceSchema = new mongoose.Schema(
     mentors: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: 'User'
-      }
+        ref: 'User',
+      },
     ],
     available_seat: {
       type: Number,
@@ -129,58 +129,57 @@ const spaceSchema = new mongoose.Schema(
 
 spaceSchema.index({
   full: 1,
-})
- spaceSchema.index({
-   number_of_laptop: -1,
- })
+});
+spaceSchema.index({
+  number_of_laptop: -1,
+});
 
 spaceSchema.index({
   number_of_printers: -1,
-})
+});
 
 spaceSchema.index({
   number_of_call_room: -1,
-})
+});
 
 spaceSchema.index({
   number_of_room_conference: -1,
-})
+});
 
 spaceSchema.index({
   number_of_cosy_room: -1,
-})
+});
 
 spaceSchema.index({
-  ratingsAverage: 1
-})
+  ratingsAverage: 1,
+});
 
 spaceSchema.index({
-  slug: 1
-})
+  slug: 1,
+});
 
 spaceSchema.index({
-  location: '2dsphere'
-})
+  location: '2dsphere',
+});
 
 spaceSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
-spaceSchema.pre(/^find/, function() {
+spaceSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'mentors',
-    select: '-__v -passwordChangedAt'
+    select: '-_v -passwordChangedAt',
   });
+  next();
 });
-
 
 spaceSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'space',
-  localField: '_id'
-})
-
+  localField: '_id',
+});
 
 const Space = mongoose.model('Space', spaceSchema);
 module.exports = Space;
