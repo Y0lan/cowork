@@ -1,13 +1,36 @@
-const express = require('express')
-const router = express.Router()
-const viewsController = require('./../controllers/viewsController')
+const express = require('express');
+const router = express.Router();
+const viewsController = require('./../controllers/viewsController');
+const authentificationController = require('./../controllers/authentificationController');
 
-router.get('/', viewsController.getOverview)
+router.get(
+  '/',
+  authentificationController.isLoggedIn,
+  viewsController.getOverview
+);
 
-router.get('/space', (req, res) => {
-  res.status(200).render('space', {
-    title: 'space'
-  })
-})
+router.get(
+  '/space/:slug',
+  authentificationController.isLoggedIn,
+  viewsController.getSpace
+);
 
-module.exports = router
+router.get(
+  '/login',
+  authentificationController.isLoggedIn,
+  viewsController.getLoginForm
+);
+
+router.get(
+  '/signup',
+  authentificationController.isLoggedIn,
+  viewsController.getSignupForm
+);
+
+router.get(
+  '/me',
+  authentificationController.protect,
+  viewsController.getAccount
+);
+
+module.exports = router;

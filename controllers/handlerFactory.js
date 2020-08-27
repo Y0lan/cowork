@@ -4,7 +4,7 @@ const bson = require('bson');
 const AppError = require('../utils/AppError');
 
 exports.deleteOne = (Model) =>
-  catchAsynchronousError(async (req, res) => {
+  catchAsynchronousError(async (req, res, next) => {
     const document = await Model.findByIdAndDelete(req.params.id);
     res.status(204).json({
       status: 'success',
@@ -13,7 +13,7 @@ exports.deleteOne = (Model) =>
   });
 
 exports.updateOne = (Model) =>
-  catchAsynchronousError(async (req, res) => {
+  catchAsynchronousError(async (req, res, next) => {
     const document = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -27,7 +27,7 @@ exports.updateOne = (Model) =>
   });
 
 exports.create = (Model) =>
-  catchAsynchronousError(async (req, res) => {
+  catchAsynchronousError(async (req, res, next) => {
     const document = await Model.create(req.body);
     res.status(201).json({
       status: 'success',
@@ -63,7 +63,7 @@ exports.getOne = (Model, populateOptions) =>
   });
 
 exports.getAll = (Model) =>
-  catchAsynchronousError(async (req, res) => {
+  catchAsynchronousError(async (req, res, next) => {
     // TODO refacto ce hack
     // pour permettre les router nesté pour GET les reviews
     let filter = {};

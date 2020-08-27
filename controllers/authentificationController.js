@@ -62,9 +62,17 @@ exports.login = catchAsynchronousError(async (req, res, next) => {
   createSendToken(user, 201, res);
 });
 
+exports.logout = (req, res) => {
+  res.clearCookie('jwt');
+
+  res.status(200).json({
+    status: 'success',
+  });
+};
+
 exports.protect = catchAsynchronousError(async (req, res, next) => {
   // Get the token
-  let token = req.headers.authorization;
+  let token = req.headers.authorization || req.cookies.jwt;
 
   // Check if the token exist
   if (!token) {
@@ -73,6 +81,7 @@ exports.protect = catchAsynchronousError(async (req, res, next) => {
   if (token && token.startsWith('Bearer')) {
     token = token.split(' ')[1];
   }
+
   // Validate the token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
   // Check if user still exists
@@ -95,6 +104,7 @@ exports.protect = catchAsynchronousError(async (req, res, next) => {
   }
   // get access to protected route
   req.user = loggedUser;
+  res.locals.user = loggedUser;
   next();
 });
 
@@ -188,4 +198,19 @@ exports.updateMyPassword = catchAsynchronousError(async (req, res, next) => {
   await user.save();
   // log user in
   createSendToken(user, 200, res);
+});
+
+exports.isLoggedIn = catchAsynchronousError(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    const user = await User.findById(decoded.id);
+    if (!user) return next();
+    if (user.changePasswordAfter(decoded.iat)) return next();
+    res.locals.user = user;
+  }
+  next();
 });

@@ -9,6 +9,7 @@ router.use('/:userID/reviews', reviewRouter);
 router.post('/signup', authentificationController.signup);
 
 router.post('/login', authentificationController.login);
+router.get('/logout', authentificationController.logout);
 router.post('/forgotPassword', authentificationController.forgotPassword);
 router.patch('/resetPassword/:token', authentificationController.resetPassword);
 

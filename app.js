@@ -3,9 +3,12 @@ const morgan = require('morgan');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const cors = require('cors');
 const xss = require('xss-clean');
 const mongoSanitize = require('express-mongo-sanitize');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
+
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controllers/errorController');
 const spacesRouter = require('./routes/spaceRoutes');
@@ -15,6 +18,7 @@ const viewsRouter = require('./routes/viewsRoutes');
 
 const app = express();
 
+app.enable('trust proxy');
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -22,7 +26,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // MIDDLEWARE
-
+app.use(cors());
+//app.options('*', cors());
 // set security HTTP headers
 app.use(helmet());
 
@@ -41,7 +46,7 @@ app.use(
     limit: '10kb',
   })
 );
-
+app.use(cookieParser());
 // data sanitization against NOSQL query injection
 app.use(mongoSanitize());
 // data sanitization against cross site scripting attack
