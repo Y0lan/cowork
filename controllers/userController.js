@@ -1,9 +1,13 @@
+const multer = require('multer');
+const sharp = require('sharp');
 const User = require('../models/userModel');
 const Space = require('./../models/spaceModel');
 const AppError = require('./../utils/AppError');
 const catchAsynchronousError = require('./../utils/catchAsynchronousError');
 const isIDValid = require('./../utils/isIDValid');
 const factory = require('./handlerFactory');
+
+const multerStorage = multer.memoryStorage();
 
 const filterObject = (obj, ...allowedFields) => {
   const newObject = {};
@@ -13,6 +17,36 @@ const filterObject = (obj, ...allowedFields) => {
     }
   });
   return newObject;
+};
+
+const multerFilter = (req, file, callback) => {
+  console.log(file);
+  if (file.mimetype.startsWith('image')) {
+    return callback(null, true);
+  }
+  callback(new AppError('You can only upload an image here! 😬', 404), false);
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadUserPhoto = upload.single('photo');
+
+exports.resizeUserPhoto = async (req, res, next) => {
+  if (!req.file) return next();
+
+  req.file.filename = `${req.user.email}.jpeg`;
+
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({
+      quality: 90,
+    })
+    .toFile(`public/img/users/${req.file.filename}`);
+  next();
 };
 
 exports.updateMe = catchAsynchronousError(async (req, res, next) => {
@@ -25,6 +59,7 @@ exports.updateMe = catchAsynchronousError(async (req, res, next) => {
 
   // filter body object
   req.body = filterObject(req.body, 'name', 'email');
+  if (req.file) req.body.photo = req.file.filename;
   // update the user document
   const user = await User.findByIdAndUpdate(req.user.id, req.body, {
     new: true,

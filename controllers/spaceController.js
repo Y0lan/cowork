@@ -1,8 +1,60 @@
+const multer = require('multer');
+const sharp = require('sharp');
 const Space = require('./../models/spaceModel');
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
 const factory = require('./handlerFactory');
 const isIDValid = require('./../utils/isIDValid');
 const AppError = require('./../utils/AppError');
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, callback) => {
+  if (file.mimetype.startsWith('image')) {
+    return callback(null, true);
+  }
+  callback(new AppError('You can only upload an image here! 😬', 404), false);
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadSpaceImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 4 },
+]);
+
+exports.resizeSpaceImages = async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) return next();
+
+  req.body.imageCover = `space-${req.params.id}-cover`;
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({
+      quality: 90,
+    })
+    .toFile(`public/img/spaces/${req.body.imageCover}`);
+
+  req.body.images = [];
+
+  await Promise.all(
+    req.files.images.map(async (file, i) => {
+      const filename = `space-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+
+      await sharp(file.buffer)
+        .resize(2000, 1333)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/spaces/${filename}`);
+
+      req.body.images.push(filename);
+    })
+  );
+
+  next();
+};
 
 const isValidCoordinates = (coordinates) => {
   const [lat, long] = coordinates.split(',');
@@ -89,6 +141,6 @@ exports.deleteOneSpace = factory.deleteOne(Space);
 exports.isIDValid = isIDValid(Space);
 
 exports.getSpacesStatistics = catchAsynchronousError(async (req, res, next) => {
-  //TODO tout le bordel des stats loool
+  //TODO trouver des statistiques si jamais j'ai le temps
   next();
 });

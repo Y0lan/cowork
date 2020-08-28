@@ -1,6 +1,7 @@
 const express = require('express');
 const spaceController = require('./../controllers/spaceController');
 const authentificationController = require('./../controllers/authentificationController');
+const { uploadSpaceImages, resizeSpaceImages } = spaceController;
 const reviewRouter = require('./reviewRoutes');
 const router = express.Router();
 
@@ -36,6 +37,8 @@ router
     authentificationController.protect,
     authentificationController.restrictTo('admin'),
     spaceController.isIDValid('id'),
+    uploadSpaceImages,
+    resizeSpaceImages,
     spaceController.updateOneSpace
   );
 

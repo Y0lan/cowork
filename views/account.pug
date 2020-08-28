@@ -29,7 +29,7 @@ block content
             .user-view__content
                 .user-view__form-container
                     h2.heading-secondary.ma-bt-md Your account settings
-                    form.form.form-user-data
+                    form.form.form-user-data#user-settings
                         .form__group
                             label.form__label(for='name') Name
                             input#name.form__input(type='text', value=`${user.name}`, required, name='name')
@@ -48,12 +48,12 @@ block content
 
                 .user-view__form-container
                     h2.heading-secondary.ma-bt-md Password change
-                    form.form.form-user-password
+                    form.form.form-user-password#password-form
                         .form__group
                             label.form__label(for='password-current') Current password
                             input#password-current.form__input(type='password', placeholder='••••••••', required, minlength='8')
                         .form__group
-                            label.form__label(for='password') New password
-                            input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
+                            label.form__label(for='password-new') New password
+                            input#password-new.form__input(type='password', placeholder='••••••••', required, minlength='8')
                         .form__group.right
-                            button.btn.btn--small.btn--green.btn--save-password Save password
+                            button.btn.btn--small.btn--green.btn--save-password#save-password-btn Save password
