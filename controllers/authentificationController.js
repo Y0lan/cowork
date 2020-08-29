@@ -3,7 +3,7 @@ const User = require('./../models/userModel');
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
 const AppError = require('./../utils/AppError');
 const { promisify } = require('util');
-const sendEmail = require('./../utils/email');
+const Email = require('./../utils/email');
 const crypto = require('crypto');
 
 const signJWT = (id) => {
@@ -39,6 +39,8 @@ exports.signup = catchAsynchronousError(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
   });
+  const url = `${req.protocol}://${req.get('host')}/me`;
+  await new Email(user, url).sendWelcome();
   createSendToken(user, 201, res);
 });
 
@@ -131,17 +133,15 @@ exports.forgotPassword = catchAsynchronousError(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // sent email to user
-  const resetUrl = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/users/resetPassword/${resetToken}`;
-  const message = `Forgot your password? Click here: ${resetUrl}. 
-  If you did not request a password change, simply ignore this email.`;
+
   try {
-    await sendEmail({
-      email: user.email,
-      subject: 'cowork.io reset token (valid for 10 minutes)',
-      message,
-    });
+    //TODO add a button + form (password forgotten)
+    //TODO make a form to change the password that sends the PATCH request to the correct url
+    const resetUrl = `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/users/resetPassword/${resetToken}`;
+
+    await new Email(user, resetUrl).sendPasswordReset();
     res.status(200).json({
       status: 'success',
       message: 'token sent to email',
