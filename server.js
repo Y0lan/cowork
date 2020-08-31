@@ -24,7 +24,7 @@ mongoose
 
 const app = require('./app');
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log('cowork.io is under construction...');
 });
 
@@ -32,8 +32,15 @@ process.on('unhandledRejection', (error) => {
   console.error('UNCHANDLED EXCEPTION ERROR!\n', error.name, error.message);
   console.error('Shutting down...');
   // Let all the async request finish before shutting down
-  app.close(() => {
+  server.close(() => {
     // shutting down
     process.exit(1);
   });
 });
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM RECEIVED, CLOSING DOWN GRACEFULLY! ... ');
+  server.close(() => {
+    console.log('process terminated');
+  })
+})

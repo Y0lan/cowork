@@ -19,6 +19,7 @@ const viewsRouter = require('./routes/viewsRoutes');
 const subscriptionRouter = require('./routes/subscriptionsRoute');
 
 const app = express();
+app.enable('trust proxy');
 
 app.enable('trust proxy');
 app.set('view engine', 'pug');
