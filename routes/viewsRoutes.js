@@ -38,8 +38,12 @@ router.get(
   authentificationController.protect,
   authentificationController.restrictTo('user'),
   viewsController.getSubscriptionsPlans
-)
+);
 
-router.get('/my-subscription', authentificationController.protect, viewsController.getMySubscription)
+router.get(
+  '/my-subscription',
+  authentificationController.protect,
+  viewsController.getMySubscription
+);
 
 module.exports = router;

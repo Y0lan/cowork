@@ -3,6 +3,7 @@ block content
     main.main
         .card-container
 
+          if spaces
             each space in spaces
                 .card
                     .card__header
@@ -37,4 +38,13 @@ block content
                             |
                             span.card__footer-text= ` rating (${space.ratingsQuantity})`
                         a.btn.btn--green.btn--small(href=`/space/${space.slug}`) Details
+
+          if subscription
+            h1=subscription
+            if subscriptionIsValid
+                h2 THANKS FOR BEING PART OF THE FAMILY
+                h2 CANCEL ANYTIME BY SENDING A MAIL TO admin@cowork.io
+            else
+                h2 PLEASE RENEW SOON !
+
 
