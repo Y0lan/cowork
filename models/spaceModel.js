@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+
 const spaceSchema = new mongoose.Schema(
   {
     name: {

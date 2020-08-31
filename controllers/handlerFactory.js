@@ -1,6 +1,7 @@
+const bson = require('bson');
+
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
 const APIFeatures = require('../utils/APIFeatures');
-const bson = require('bson');
 const AppError = require('../utils/AppError');
 
 exports.deleteOne = (Model) =>

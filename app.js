@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 const mongoSanitize = require('express-mongo-sanitize');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -58,6 +59,8 @@ app.use(
     whitelist: [],
   })
 );
+
+app.use(compression());
 
 if (process.env.NODE_ENV === 'dev') app.use(morgan('dev'));
 

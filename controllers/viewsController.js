@@ -1,8 +1,9 @@
 const moment = require('moment');
+
 const Space = require('./../models/spaceModel');
-const User = require('./../models/userModel');
 const catchAsynchronousError = require('../utils/catchAsynchronousError');
 const AppError = require('../utils/AppError');
+
 exports.getOverview = catchAsynchronousError(async (req, res, next) => {
   const spaces = await Space.find();
   res.status(200).render('overview', {

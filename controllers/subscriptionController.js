@@ -1,8 +1,7 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 const User = require('./../models/userModel');
 const catchAsynchronousError = require('./../utils/catchAsynchronousError');
-const factory = require('./handlerFactory');
-const isIDValid = require('./../utils/isIDValid');
 const AppError = require('./../utils/AppError');
 
 // booking_type:
