@@ -4,7 +4,7 @@ const userController = require('./../controllers/userController');
 const authentificationController = require('./../controllers/authentificationController');
 const reviewRouter = require('./reviewRoutes');
 const spaceController = require('../controllers/spaceController');
-const {  uploadUserPhoto, resizeUserPhoto } = userController
+const { uploadUserPhoto, resizeUserPhoto } = userController;
 const router = express.Router();
 
 router.use('/:userID/reviews', reviewRouter);
@@ -20,7 +20,12 @@ router.use(authentificationController.protect);
 
 router.patch('/updateMyPassword', authentificationController.updateMyPassword);
 router.get('/me', userController.getMe, userController.getOneUser);
-router.patch('/updateMe', uploadUserPhoto, resizeUserPhoto, userController.updateMe);
+router.patch(
+  '/updateMe',
+  uploadUserPhoto,
+  resizeUserPhoto,
+  userController.updateMe
+);
 router.delete('/deleteMe', userController.deleteMe);
 
 // All the route below will need you to be ADMIN.

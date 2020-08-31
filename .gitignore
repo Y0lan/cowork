@@ -100,6 +100,20 @@ dist
 
 # DynamoDB Local files
 .dynamodb/
+.cache
 
 # TernJS port file
 .tern-port
+.idea/CoWork.iml
+.idea/codeStyles/
+.idea/inspectionProfiles/
+.idea/jsLibraryMappings.xml
+.idea/jsLinters/
+.idea/misc.xml
+.idea/modules.xml
+.idea/prettier.xml
+.idea/vcs.xml
+.idea/watcherTasks.xml
+.idea/webResources.xml
+package-lock.json
+public/js/bundle.js.map

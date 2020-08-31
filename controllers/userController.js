@@ -21,7 +21,6 @@ const filterObject = (obj, ...allowedFields) => {
 };
 
 const multerFilter = (req, file, callback) => {
-  console.log(file);
   if (file.mimetype.startsWith('image')) {
     return callback(null, true);
   }

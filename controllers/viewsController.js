@@ -50,14 +50,15 @@ exports.getSubscriptionsPlans = (req, res) => {
 };
 
 const getSubscriptionFromUser = (user) => {
-  if(user.subscription_type === 'resident_committed') {
+  if (user.subscription_type === 'resident_committed') {
     const remainingTime = moment(Date.now())
       .add(8, 'months')
-      .diff(moment(user.member_since))
+      .diff(moment(user.member_since));
     if (remainingTime < 0)
       return {
-        subscriptionIsValid: false, subscription: 'You have no time left. Please subscribe'
-      }
+        subscriptionIsValid: false,
+        subscription: 'You have no time left. Please subscribe',
+      };
   }
 
   const messageForEachSubscriptionTypes = {
@@ -74,18 +75,25 @@ const getSubscriptionFromUser = (user) => {
     resident_committed: `You are a resident since ${moment(
       user.member_since
     ).format('DD/MM/YYYY')}. 
-    You have committed for 8 months, so you have ${moment.duration(moment(Date.now())
-      .add(8, 'months')
-      .diff(moment(user.member_since))).humanize()} left`,
+    You have committed for 8 months, so you have ${moment
+      .duration(
+        moment(Date.now()).add(8, 'months').diff(moment(user.member_since))
+      )
+      .humanize()} left`,
   };
-  return { subscriptionIsValid: true, subscription: messageForEachSubscriptionTypes[`${user.subscription_type}`] };
+  return {
+    subscriptionIsValid: true,
+    subscription: messageForEachSubscriptionTypes[`${user.subscription_type}`],
+  };
 };
 
 exports.getMySubscription = (req, res) => {
-  const {subscriptionIsValid, subscription } = getSubscriptionFromUser(req.user);
+  const { subscriptionIsValid, subscription } = getSubscriptionFromUser(
+    req.user
+  );
   res.status(200).render('overview', {
     title: 'My subscription',
     subscription,
-    subscriptionIsValid
+    subscriptionIsValid,
   });
 };

@@ -71,21 +71,21 @@ exports.getCheckoutSession = catchAsynchronousError(async (req, res, next) => {
       },
     ],
   });
-  req.subscription_type = req.params.subscription_type
-  req.session = session
+  req.subscription_type = req.params.subscription_type;
+  req.session = session;
   next();
 });
 
 exports.createSubscriptionCheckout = catchAsynchronousError(
   async (req, res, next) => {
     const user = await User.findById(req.user.id);
-    user.subscription_type = req.subscription_type
-    user.member_since = Date.now()
+    user.subscription_type = req.subscription_type;
+    user.member_since = Date.now();
     await user.save();
     res.status(200).json({
       status: 'success',
       session: req.session,
-      user
-    })
+      user,
+    });
   }
 );

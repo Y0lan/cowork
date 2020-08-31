@@ -45,15 +45,15 @@ const userSchema = new mongoose.Schema({
   },
   mail_verified: {
     type: Boolean,
-    default: false
+    default: false,
   },
   subscription_type: {
     type: String,
     enum: ['none', 'month', 'year', 'resident', 'resident_committed'],
-    default: 'none'
+    default: 'none',
   },
   member_since: {
-    type: Date
+    type: Date,
   },
 });
 
