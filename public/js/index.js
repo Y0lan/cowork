@@ -3,12 +3,14 @@ import { login } from './login';
 import { signup } from './signup';
 import { logout } from './logout';
 import { updateSettings } from './updateSettings';
+import { subscribeUser } from './stripe'
 
 const loginForm = document.querySelector('#login');
 const signupForm = document.querySelector('#signup');
 const userSettingsForm = document.querySelector('#user-settings');
 const userPasswordForm = document.querySelector('#password-form');
 const logOutButton = document.querySelector('#logout');
+const subscribeButton = document.getElementsByClassName('subscribe-button')
 
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
@@ -61,4 +63,14 @@ if (userPasswordForm) {
       'password'
     );
   });
+}
+
+if(subscribeButton.length > 0){
+  for (let btn of subscribeButton) {
+    btn.addEventListener('click', async e => {
+      e.target.textContent = 'Processing...'
+      const { subscriptionType } = e.target.dataset;
+      await subscribeUser(subscriptionType)
+    })
+  }
 }

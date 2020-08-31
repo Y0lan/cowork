@@ -1,0 +1,86 @@
+extends base
+block content
+    table(style='width:100%', border='1')
+        tr
+            th
+            th No subscription
+            th Subscription - average plan
+            th Subscription - resident
+        tr
+            td Online payment
+            td ❌
+            td ✅
+            td ✅
+        tr
+        tr
+            td Subscription without commitment
+            td ❌
+            td ✅ ( 24€ per month )
+            td ✅ ( 300€ per month )
+        tr
+        tr
+            td Subscription with commitment
+            td ❌
+            td ✅ 20€ / month ( 240€ / year )
+            td ✅ 252€ / month (8 months commitment)
+        tr
+        tr
+            td First hour
+            td 5€
+            td 4€
+            td unlimited
+        tr
+        tr
+            td + 30 minutes
+            td 2.5€
+            td 2€
+            td unlimited
+        tr
+        tr
+            td 5h+
+            td 24€ ( 20€ student )
+            td 20€
+            td unlimited
+        tr
+        tr
+            td Food and drink
+            td ✅
+            td ✅
+            td ✅
+        tr
+
+        tr
+            td Wifi
+            td ✅
+            td ✅
+            td ✅
+        tr
+        tr
+            td Phone
+            td ✅
+            td ✅
+            td ✅
+        tr
+        tr
+            td Going to another coworking space
+            td ❌
+            td ✅
+            td ✅
+        tr
+        tr
+            td Premium access to the HUB
+            td ❌
+            td ✅
+            td ✅
+        tr
+        tr
+            td Unlimited access to all co working space 24 / 7
+            td ❌
+            td ❌
+            td ✅
+        tr
+
+        button.btn--green.span-all-rows.subscribe-button(data-subscription-type='month') Subscribe 1 month (24€)
+        button.btn--green.span-all-rows.subscribe-button(data-subscription-type='year') Subscribe 1 year (240€)
+        button.btn--green.span-all-rows.subscribe-button(data-subscription-type='resident_month') Become resident 1 month (300€)
+        button.btn--green.span-all-rows.subscribe-button(data-subscription-type='resident_committed') Become resident 1 month - committed 8 month (252€)

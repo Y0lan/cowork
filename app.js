@@ -15,6 +15,7 @@ const spacesRouter = require('./routes/spaceRoutes');
 const usersRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewsRouter = require('./routes/viewsRoutes');
+const subscriptionRouter = require('./routes/subscriptionsRoute');
 
 const app = express();
 
@@ -66,6 +67,7 @@ app.use('/', viewsRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/spaces', spacesRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/subscriptions', subscriptionRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));

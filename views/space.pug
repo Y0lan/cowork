@@ -74,6 +74,6 @@ block content
                 p.cta__text= `only ...€ per days. One goal. Infinite memories. Go today !`
 
                 if user
-                    button.btn.btn--green.span-all-rows#book-space(data-space-id=`${space.id}`) Book your place now!
+                    a.btn.btn--green.span-all-rows(href='/subscribe') Subscribe now!
                 else
-                    a.btn.btn--green.span-all-rows(href='/login') Log in to book a moment
+                    a.btn.btn--green.span-all-rows(href='/login') Sign Up or Log in now to subscribe !

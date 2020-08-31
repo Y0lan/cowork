@@ -42,6 +42,18 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'Space',
   },
+  mail_verified: {
+    type: Boolean,
+    default: false
+  },
+  subscription_type: {
+    type: String,
+    enum: ['none', 'month', 'year', 'resident', 'resident_committed'],
+    default: 'none'
+  },
+  member_since: {
+    type: Date
+  },
 });
 
 userSchema.pre('save', async function (next) {
