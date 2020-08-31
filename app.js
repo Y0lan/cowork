@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // MIDDLEWARE
 app.use(cors());
-//app.options('*', cors());
+app.options('*', cors());
 // set security HTTP headers
 app.use(helmet());
 
