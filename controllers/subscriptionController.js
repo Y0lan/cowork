@@ -58,7 +58,7 @@ exports.getCheckoutSession = catchAsynchronousError(async (req, res, next) => {
     success_url: `${req.protocol}://${req.get('host')}/my-subscription`,
     cancel_url: `${req.protocol}://${req.get('host')}/`,
     customer_email: req.user.email,
-    client_reference_id: req.user.id,
+    client_reference_id: req.params.subscription_type,
     line_items: [
       {
         name: getSubscriptionsNames(req.params.subscription_type),
@@ -71,21 +71,38 @@ exports.getCheckoutSession = catchAsynchronousError(async (req, res, next) => {
       },
     ],
   });
-  req.subscription_type = req.params.subscription_type;
-  req.session = session;
+  console.log(session);
   next();
 });
 
-exports.createSubscriptionCheckout = catchAsynchronousError(
-  async (req, res, next) => {
-    const user = await User.findById(req.user.id);
-    user.subscription_type = req.subscription_type;
+const createSubscriptionCheckout = catchAsynchronousError(
+  async (subscription_type, session) => {
+    const user = (await User.findOne({ email: session.customer_email }))._id;
+    user.subscription_type = session.client_reference_id;
     user.member_since = Date.now();
     await user.save();
     res.status(200).json({
       status: 'success',
-      session: req.session,
       user,
     });
   }
 );
+
+exports.webhookCheckout = (req, res, next) => {
+  const signature = req.headers['stripe-signature'];
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
+
+  if (event.type === 'checkout.session.complete') {
+    createSubscriptionCheckout(event.data.object);
+  }
+  next();
+};

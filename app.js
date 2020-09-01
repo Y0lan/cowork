@@ -17,6 +17,7 @@ const usersRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewsRouter = require('./routes/viewsRoutes');
 const subscriptionRouter = require('./routes/subscriptionsRoute');
+const subscriptionController = require('./controllers/subscriptionController');
 
 const app = express();
 app.enable('trust proxy');
@@ -42,6 +43,12 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter);
+
+// response needed not in json
+app.post('/webhook-checkout',
+  express.raw({type: 'application/json'}),
+  subscriptionController.webhookCheckout);
+
 
 // body and response management
 app.use(

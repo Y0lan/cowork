@@ -15,7 +15,7 @@ router.get(
   authenticationController.restrictTo('user'),
   bookingController.checkSubscriptionType,
   bookingController.getCheckoutSession,
-  bookingController.createSubscriptionCheckout
+  //bookingController.createSubscriptionCheckout
 );
 
 module.exports = router;
