@@ -134,7 +134,7 @@ exports.makeMentor = catchAsynchronousError(async (req, res, next) => {
   // add mentor to space
   if (!space.mentors.some(({ _id }) => String(_id) === String(mentorID))) {
     space.mentors.push(mentorID);
-    space.save();
+    await space.save();
   }
 
   // send response
@@ -163,13 +163,13 @@ exports.makeUser = catchAsynchronousError(async (req, res, next) => {
   // removing the space from user
   user.space = undefined;
   user.role = 'user';
-  user.save();
+  await user.save();
 
   // removing the mentor from space
   space.mentors = space.mentors.filter(
     ({ _id }) => String(_id) !== String(userID)
   );
-  space.save();
+  await space.save();
 
   res.status(200).json({
     status: 'success',
