@@ -71,12 +71,11 @@ exports.getCheckoutSession = catchAsynchronousError(async (req, res, next) => {
       },
     ],
   });
-  console.log(session);
   next();
 });
 
 const createSubscriptionCheckout = catchAsynchronousError(
-  async (subscription_type, session) => {
+  async (session) => {
     const user = (await User.findOne({ email: session.customer_email }))._id;
     user.subscription_type = session.client_reference_id;
     user.member_since = Date.now();
@@ -104,5 +103,5 @@ exports.webhookCheckout = (req, res, next) => {
   if (event.type === 'checkout.session.complete') {
     createSubscriptionCheckout(event.data.object);
   }
-  next();
+  res.status(200).json({ received: true });
 };

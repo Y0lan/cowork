@@ -15,7 +15,6 @@ router.get(
   authenticationController.restrictTo('user'),
   bookingController.checkSubscriptionType,
   bookingController.getCheckoutSession,
-  bookingController.webhookCheckout
   //bookingController.createSubscriptionCheckout
 );
 
