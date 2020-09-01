@@ -77,13 +77,12 @@ exports.getCheckoutSession = catchAsynchronousError(async (req, res, next) => {
   });
 });
 
-const createSubscriptionCheckout = catchAsynchronousError(async (session) => {
-  console.log(session);
-  const user = (await User.findOne({ email: session.customer_email }))._id;
+const createSubscriptionCheckout = async (session) => {
+  const user = await User.findOne({ email: session.customer_email });
   user.subscription_type = session.client_reference_id;
   user.member_since = Date.now();
   await user.save();
-});
+};
 
 exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
@@ -97,11 +96,8 @@ exports.webhookCheckout = (req, res, next) => {
   } catch (error) {
     return res.status(400).send(error.message);
   }
-  console.log(1);
-
-  if (event.type === 'checkout.session.completed') {
-    createSubscriptionCheckout(event.data.object);
-    console.log(2);
-  }
+  console.log(event);
+  console.log("session: ", session);
+  createSubscriptionCheckout(event.data.object);
   res.status(200).json({ received: true });
 };
