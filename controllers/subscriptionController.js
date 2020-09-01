@@ -100,6 +100,6 @@ exports.webhookCheckout = async (req, res, next) => {
   }
   console.log(event);
   if(event.type === 'checkout.session.completed')
-    await createSubscriptionCheckout(event.data.object);
+    createSubscriptionCheckout(event.data.object);
   res.status(200).json({ received: true });
 };
