@@ -43,7 +43,7 @@ exports.checkSubscriptionType = (req, res, next) => {
   }
   return next(
     new AppError(
-      `booking type ${req.params.subscription_type} does not exist`,
+      `booking type ${req.params.subscriptionType} does not exist`,
       400
     )
   );
@@ -71,21 +71,18 @@ exports.getCheckoutSession = catchAsynchronousError(async (req, res, next) => {
       },
     ],
   });
-  next();
+  res.status(200).json({
+    status: 'success',
+    session,
+  });
 });
 
-const createSubscriptionCheckout = catchAsynchronousError(
-  async (session) => {
-    const user = (await User.findOne({ email: session.customer_email }))._id;
-    user.subscription_type = session.client_reference_id;
-    user.member_since = Date.now();
-    await user.save();
-    res.status(200).json({
-      status: 'success',
-      user,
-    });
-  }
-);
+const createSubscriptionCheckout = catchAsynchronousError(async (session) => {
+  const user = (await User.findOne({ email: session.customer_email }))._id;
+  user.subscription_type = session.client_reference_id;
+  user.member_since = Date.now();
+  await user.save();
+});
 
 exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
@@ -100,7 +97,7 @@ exports.webhookCheckout = (req, res, next) => {
     return res.status(400).send(error.message);
   }
 
-  if (event.type === 'checkout.session.complete') {
+  if (event.type === 'checkout.session.completed') {
     createSubscriptionCheckout(event.data.object);
   }
   res.status(200).json({ received: true });

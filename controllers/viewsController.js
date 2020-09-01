@@ -50,19 +50,35 @@ exports.getSubscriptionsPlans = (req, res) => {
 };
 
 const getSubscriptionFromUser = (user) => {
+
+  if(user.subscription_type === 'none') {
+    return {subscriptionIsValid: false, subscription: 'You are not a member.'}
+  }
+
   if (user.subscription_type === 'resident_committed') {
     const remainingTime = moment(Date.now())
       .add(8, 'months')
       .diff(moment(user.member_since));
-    if (remainingTime < 0)
+    if (remainingTime <= 0)
+      return {
+        subscriptionIsValid: false,
+        subscription: 'You have no time left. Please subscribe',
+      };
+  }
+   //TODO refacto en fonction
+  else {
+    const remainingTime = moment(Date.now())
+      .add(1, 'months')
+      .diff(moment(user.member_since));
+    if (remainingTime <= 0)
       return {
         subscriptionIsValid: false,
         subscription: 'You have no time left. Please subscribe',
       };
   }
 
+
   const messageForEachSubscriptionTypes = {
-    none: 'You are not a member.',
     month: `You are a member since ${moment(user.member_since).format(
       'DD/MM/YYYY'
     )}`,

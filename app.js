@@ -22,7 +22,6 @@ const subscriptionController = require('./controllers/subscriptionController');
 const app = express();
 app.enable('trust proxy');
 
-app.enable('trust proxy');
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -45,10 +44,11 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // response needed not in json
-app.post('/webhook-checkout',
-  express.raw({type: 'application/json'}),
-  subscriptionController.webhookCheckout);
-
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  subscriptionController.webhookCheckout
+);
 
 // body and response management
 app.use(

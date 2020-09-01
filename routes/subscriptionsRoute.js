@@ -14,7 +14,7 @@ router.get(
   authenticationController.protect,
   authenticationController.restrictTo('user'),
   bookingController.checkSubscriptionType,
-  bookingController.getCheckoutSession,
+  bookingController.getCheckoutSession
   //bookingController.createSubscriptionCheckout
 );
 
